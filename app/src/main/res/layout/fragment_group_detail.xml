@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginTop="20dp"
+    >
+
+
+    <TextView
+        android:id="@+id/tvIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        android:width="100dip"
+        android:text="@string/tvIcon" />
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="100dp"
+        android:maxHeight="100dp"
+        android:minWidth="100dp"
+        android:minHeight="100dp"
+        android:src="@drawable/ic_adb_black_24dp"
+        android:layout_alignBottom="@+id/tvIcon"
+        android:layout_toEndOf="@+id/tvIcon"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvIcon"
+        android:layout_marginTop="30dp"
+        android:width="100dip"
+        android:text="@string/tvName" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvName"
+        android:ems="10"
+        android:hint="@string/etName.hint"
+        android:inputType="textPersonName"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:layout_marginTop="30dp"
+        android:width="100dip"
+        android:text="@string/tvdescription" />
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvDescription"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvDescription"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/tvDescription.hint"
+        android:inputType="textPersonName" />
+
+    <ImageButton
+        android:id="@+id/bFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bFirst.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_first_page_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/bFirst"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bPrevious.hine"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
+
+
+    <ImageButton
+        android:id="@+id/bSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bBackPage"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bSave.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+
+        android:src="@drawable/ic_save_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bBackPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bBackPage.hine"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_undo_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/bBackPage"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bCancel"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        android:src="@drawable/ic_close_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bLast"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bNext.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bLast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bLast.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_last_page_black_24dp" />
+
+</RelativeLayout>

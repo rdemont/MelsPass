@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:layout_marginTop="20dp"
+    >
+
+    <TextView
+        android:id="@+id/tvGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center"
+        android:width="100dip"
+        android:text="@string/tvGroup"
+        android:textColor="#000000" />
+
+    <Spinner
+        android:id="@+id/sGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvGroup"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvGroup"
+        android:ems="10"
+        android:hint="@string/sGroup.hint" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGroup"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:width="100dip"
+        android:text="@string/tvName"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvName"
+
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/etName.hint"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:width="100dip"
+        android:text="@string/tvUserName"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/etUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvUserName"
+        android:ems="10"
+        android:hint="@string/etUserName.hint"
+        android:inputType="textPersonName"
+        android:autofillHints="" />
+
+    <ImageButton
+        android:id="@+id/bCopyUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etUserName"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bCopy.hint"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_content_copy_black_24dp" />
+
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvUserName"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:width="100dip"
+        android:text="@string/tvPassword"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/etUserPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvPassword"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvPassword"
+        android:ems="10"
+        android:hint="@string/etUserPass.hint"
+        android:inputType="textPassword"
+        android:autofillHints="" />
+
+    <ImageButton
+        android:id="@+id/bShowUserPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etUserPass"
+        android:layout_toStartOf="@id/bCopyUserName"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bShowPassword"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_remove_red_eye_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bCopyUserPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etUserPass"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bCopy.hint"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_content_copy_black_24dp" />
+
+    <TextView
+        android:id="@+id/tvUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvPassword"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:width="100dip"
+        android:text="@string/tvUrl"
+        android:textColor="#000000" />
+
+    <EditText
+        android:id="@+id/etUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvUrl"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tvUrl"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/etUrl.hint"
+        android:inputType="textUri" />
+
+    <ImageButton
+        android:id="@+id/bOpenUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etUrl"
+        android:layout_toStartOf="@id/bCopyUrl"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bCopy.hint"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_open_in_browser_black_24dp" />
+
+
+    <ImageButton
+        android:id="@+id/bCopyUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etUrl"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bCopy.hint"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_content_copy_black_24dp" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvUrl"
+        android:layout_marginTop="30dp"
+        android:text="@string/tvdescription"
+        android:textColor="#000000" />
+
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tvUrl"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="80dp"
+        android:height="200dip"
+        android:autofillHints=""
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/tvDescription.hint"
+        android:inputType="textMultiLine" />
+
+
+    <ImageButton
+        android:id="@+id/bFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bFirst.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_first_page_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/bFirst"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bPrevious.hine"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
+
+
+    <ImageButton
+        android:id="@+id/bSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bBackPage"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bSave.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+
+        android:src="@drawable/ic_save_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bBackPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bBackPage.hine"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_undo_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/bBackPage"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bCancel"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        android:src="@drawable/ic_close_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bLast"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bNext.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bLast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bLast.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        app:srcCompat="@drawable/ic_last_page_black_24dp" />
+
+</RelativeLayout>

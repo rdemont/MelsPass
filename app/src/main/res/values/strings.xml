@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">MelsPass</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Pass_edit_label_width">100dip</string>
+    <string name="tvUrl">Url :</string>
+    <string name="tvPassword">Password :</string>
+    <string name="tvUserName">Username :</string>
+    <string name="tvName">Name :</string>
+    <string name="tvGroup">Groupe :</string>
+    <string name="tvdescription">Description :</string>
+    <string name="tvDescription.hint">"Description "</string>
+    <string name="sGroup.hint">Choix du groupe</string>
+    <string name="etName.hint">Nom de l\'entrée</string>
+    <string name="etUserName.hint">Username</string>
+    <string name="etUserPass.hint">Password</string>
+    <string name="etUrl.hint">Url de l\'entrée</string>
+    <string name="bCopy.hint">Copier dans le presse-papier</string>
+    <string name="bShowPassword">Afficher / cacher le password</string>
+    <string name="bSave.hint">Sauvegarder</string>
+    <string name="bCancel">Annuler</string>
+    <string name="group.add">Ajouter un groupe</string>
+    <string name="menu.Search">Rechercher</string>
+    <string name="Pass.add">Ajouter un password</string>
+    <string name="bFirst.hint">Premier</string>
+    <string name="bNext.hint">Prochain</string>
+    <string name="bPrevious.hine">Précédent</string>
+    <string name="bBackPage.hine">Retour</string>
+    <string name="bLast.hint">Dernier</string>
+    <string name="Pass.edit">Modifier</string>
+    <string name="bEdit.hint">Editer</string>
+    <string name="bdelete.hint">Supprimer</string>
+    <string name="tvIcon">Icon :</string>
+</resources>
