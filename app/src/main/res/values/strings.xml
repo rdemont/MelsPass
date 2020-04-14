@@ -32,4 +32,8 @@
     <string name="bEdit.hint">Editer</string>
     <string name="bdelete.hint">Supprimer</string>
     <string name="tvIcon">Icon :</string>
+    <string name="Ok">Oui</string>
+    <string name="No">Non</string>
+    <string name="Delete">Supprimer</string>
+    <string name="Delete_Msg">"Are you sure you want to delete?</string>
 </resources>

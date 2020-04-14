@@ -6,17 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import java.util.List;
 
 import ch.rmbi.melspass.R;
-import ch.rmbi.melspass.room.Group;
-import ch.rmbi.melspass.room.GroupWithPass;
-import ch.rmbi.melspass.room.Pass;
 import ch.rmbi.melspass.room.ViewModel;
 
 
@@ -25,13 +20,25 @@ public class MainActivity extends AppCompatActivity  {
     MenuItem menuSearch;
     MenuItem menuAddPass;
     MenuItem menuAddGroup;
-    MenuItem menuEditPass;
+
 
     private boolean isLargeScreen = false ;
     private ViewModel groupViewModel ;
-    //private List<GroupWithPass> listGroupWithPass ;
+
     private int groupPosition = 0;
     private int passPosition = 0;
+
+    public ViewModel getGroupViewModel() {
+        return groupViewModel;
+    }
+
+    public int getGroupPosition() {
+        return groupPosition;
+    }
+
+    public int getPassPosition() {
+        return passPosition;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +48,14 @@ public class MainActivity extends AppCompatActivity  {
         isLargeScreen = findViewById(R.id.frame_layout_detail) != null;
 
         groupViewModel = new ViewModelProvider(this).get(ViewModel .class);
-        //listGroupWithPass = groupViewModel.getGroupsWithPass().getValue();
-        show(groupViewModel.getGroupsWithPass());
+
+        show();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
     }
 
     public boolean getIsLargeScreen()
@@ -52,13 +65,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void show()
     {
-        show(groupViewModel.getGroupsWithPass());
-    }
-
-    public void show(LiveData<List<GroupWithPass>> groups)
-    {
         GroupListFragment groupListFragment = new GroupListFragment();
-        groupListFragment.setGroups(groups);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
 
         if (isLargeScreen) {
@@ -67,106 +74,128 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    public void showGroup(boolean readWrite)
+    {
+        showGroup(readWrite,false);
+    }
 
-    public void show(Group group,boolean readWrite,int pos)
+    public void showGroup(boolean readWrite,boolean isNew,int pos)
+    {
+        groupPosition = pos ;
+        showGroup(readWrite,isNew);
+    }
+
+    public void showGroup(boolean readWrite,boolean isNew)
     {
         menuSearch.setVisible(true);
-        menuAddPass.setVisible(false);
-        menuAddGroup.setVisible(false);
-        menuEditPass.setVisible(!readWrite);
+        if (readWrite) {
+            menuAddPass.setVisible(false);
+            menuAddGroup.setVisible(false);
+        }else {
+            menuAddPass.setVisible(true);
+            menuAddGroup.setVisible(true);
+        }
 
-        groupPosition = pos;
+
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
 
         GroupDetailFragment groupDetailFragment = new GroupDetailFragment();
-        if (pos < 0)
-        {
-            groupDetailFragment.updateGroup(null, groupViewModel.getGroupsWithPass(), groupPosition);
-        }else {
-            groupDetailFragment.updateGroup(groupViewModel.getGroupsWithPass().getValue().get(groupPosition).group, groupViewModel.getGroupsWithPass(), groupPosition);
-        }
+        groupDetailFragment.setisNew(isNew);
         groupDetailFragment.setReadWrite(readWrite);
+
         if(isLargeScreen)
         {
-            if (fragDetail.getClass() == GroupListFragment.class)
-            {
-                GroupListFragment groupListFragment = new GroupListFragment();
-                groupListFragment.setGroups(groupViewModel.getGroupsWithPass());
 
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
-
-            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,  new GroupListFragment()).commit();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, groupDetailFragment).commit();
+
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupDetailFragment).commit();
         }
     }
 
+    public void showPass(boolean readWrite)
+    {
+        showPass(readWrite,false);
+    }
 
-    public void show(Pass pass, boolean readWrite,int pos)
+    public void showPass(boolean readWrite,boolean isNew,int pos)
+    {
+        passPosition = pos ;
+        showPass(readWrite,isNew);
+    }
+
+    public void showPass(boolean readWrite,boolean isNew)
     {
         menuSearch.setVisible(true);
-        menuAddPass.setVisible(false);
-        menuAddGroup.setVisible(false);
-        menuEditPass.setVisible(!readWrite);
-
-        passPosition = pos;
+        if (readWrite) {
+            menuAddPass.setVisible(false);
+            menuAddGroup.setVisible(false);
+        }else {
+            menuAddPass.setVisible(true);
+            menuAddGroup.setVisible(true);
+        }
 
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
-
         PassDetailFragment passDetailFragment = new PassDetailFragment();
-        if (pos < 0) {
-            passDetailFragment.updatePass(null, null, groupPosition);
-        }else {
-            passDetailFragment.updatePass(groupViewModel.getGroupsWithPass().getValue().get(groupPosition).passList.get(passPosition), groupViewModel.getGroupsWithPass().getValue().get(groupPosition), passPosition);
-        }
+
+        passDetailFragment.setisNew(isNew);
         passDetailFragment.setReadWrite(readWrite);
         if(isLargeScreen)
         {
-            if (fragDetail.getClass() == PassListFragment.class)
-            {
-                PassListFragment passListFragment = new PassListFragment();
-                passListFragment.updatePassGroup(((PassListFragment)fragDetail).groupWithPass,groupViewModel.getGroupsWithPass());
 
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, passListFragment).commit();
-
-            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,  new PassListFragment()).commit();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passDetailFragment).commit();
+
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, passDetailFragment).commit();
         }
 
     }
 
-    public void show(GroupWithPass groupWithPass) {
-        show(groupWithPass,groupPosition);
+
+    public void showGroupList()
+    {
+        GroupListFragment groupListFragment = new GroupListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
+
+        if (isLargeScreen) {
+            WelcomeFragment welcomeFragment = new WelcomeFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
+        }
     }
 
-    public void show(GroupWithPass groupWithPass,int position)
+    public void showPassList()
     {
         menuSearch.setVisible(true);
         menuAddPass.setVisible(true);
         menuAddGroup.setVisible(true);
-        menuEditPass.setVisible(false);
-
-
-        groupPosition = position ;
 
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
 
         PassListFragment passListFragment = new PassListFragment();
-        passListFragment.updatePassGroup(groupWithPass, groupViewModel.getGroupsWithPass());
+
+
         if(isLargeScreen)
         {
+            if (fragMain.getClass() != GroupListFragment.class)
+            {
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, new GroupListFragment()).commit();
+            }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passListFragment).commit();
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, passListFragment).commit();
         }
+
+
+    }
+    public void showPassList(int grpPos)
+    {
+        groupPosition = grpPos ;
+        showPassList();
 
     }
 
@@ -176,9 +205,6 @@ public class MainActivity extends AppCompatActivity  {
         menuSearch = menu.findItem (R.id.app_bar_search);
         menuAddPass = menu.findItem (R.id.action_add_pass);
         menuAddGroup = menu.findItem (R.id.action_add_group);
-        menuEditPass = menu.findItem (R.id.action_edit_pass);
-        menuEditPass.setVisible(false);
-
         return true;
     }
 
@@ -187,33 +213,12 @@ public class MainActivity extends AppCompatActivity  {
 
         switch(item.getItemId()){
             case R.id.action_add_group:
-                show((Group)null,true,-1);
+                showGroup(true,true);
                 return true;
             case R.id.action_add_pass:
-                show((Pass)null,true,-1);
+                showPass(true,true);
                 return true;
             case R.id.app_bar_search:
-                return true;
-            case R.id.action_edit_pass:
-                Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
-                Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
-                Pass pass = null ;
-                if(fragDetail!= null && fragDetail.isVisible())
-                {
-                    if(fragDetail.getClass() == PassDetailFragment.class)
-                    {
-                        pass = ((PassDetailFragment)fragDetail).pass;
-                    }
-                }else{
-                    if(fragMain.getClass() == PassDetailFragment.class)
-                    {
-                        pass = ((PassDetailFragment)fragMain).pass;
-                    }
-                }
-                if (pass != null)
-                {
-                    show(pass,true,passPosition);
-                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

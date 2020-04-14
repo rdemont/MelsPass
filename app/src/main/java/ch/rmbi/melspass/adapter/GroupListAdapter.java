@@ -1,11 +1,15 @@
 package ch.rmbi.melspass.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +35,8 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         private final TextView tvDescription;
         private final TextView tvPassCount;
         private final ImageButton bEdit;
-        private final ImageButton bDelete;
+        private final RelativeLayout rlGroupListItem;
+
 
         private GroupViewHolder(View itemView) {
             super(itemView);
@@ -39,7 +44,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvPassCount = itemView.findViewById(R.id.tvPassCount);
             bEdit = itemView.findViewById(R.id.bEdit);
-            bDelete = itemView.findViewById(R.id.bDelete);
+            rlGroupListItem = itemView.findViewById(R.id.rlGroupListItem);
 
 
 
@@ -47,8 +52,9 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
     }
 
     private final LayoutInflater mInflater;
+    //private int size = 0 ;
     private List<GroupWithPass> groupsWithPass; // Cached copy of words
-
+    private int row_index ;
     public GroupListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
@@ -63,28 +69,27 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
 
-        if (groupsWithPass != null) {
-            GroupWithPass current = groupsWithPass.get(position);
-            holder.tvGroupName.setText(current.group.getName());
-            holder.tvDescription.setText(current.group.getDescription());
-            holder.tvPassCount.setText(String.valueOf(current.passList.size()));
-            if (current.passList.size() <= 0)
-            {
-                holder.bDelete.setVisibility(View.VISIBLE);
-            }else {
-                holder.bDelete.setVisibility(View.INVISIBLE);
-            }
-            holder.bEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)parentActivity).show(groupsWithPass.get(position).group,true,position);
-                }
-            });
+        GroupWithPass current = groupsWithPass.get(position);
+        holder.tvGroupName.setText(current.group.getName());
+        holder.tvDescription.setText(current.group.getDescription());
+        holder.tvPassCount.setText(String.valueOf(current.passList.size()));
 
-        } else {
-            // Covers the case of data not being ready yet.
-            holder.tvGroupName.setText("No Word");
+        holder.bEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((MainActivity)parentActivity).showGroup(false,false,position);
+            }
+        });
+
+        if(((MainActivity)parentActivity).getGroupPosition()==position){
+            holder.rlGroupListItem.setBackgroundColor(Color.parseColor("#59a6f7"));
         }
+        else
+        {
+            holder.rlGroupListItem.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+
     }
 
     public void setGroupsWithPass(List<GroupWithPass> grps) {
@@ -96,7 +101,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
     public int getItemCount() {
         if (groupsWithPass != null)
             return groupsWithPass.size();
-        else return 0;
+        return 0;
     }
 
 

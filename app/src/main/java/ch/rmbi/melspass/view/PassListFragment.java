@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,14 +23,14 @@ import ch.rmbi.melspass.adapter.PassListAdapter;
 import ch.rmbi.melspass.room.GroupWithPass;
 import ch.rmbi.melspass.room.ViewModel;
 import ch.rmbi.melspass.utils.ItemClickSupport;
-import ch.rmbi.melspass.utils.Session;
+
 
 public class PassListFragment extends Fragment {
 
     RecyclerView rvPassList;
     private ViewModel passViewModel ;
     GroupWithPass groupWithPass;
-    LiveData<List<GroupWithPass>> groups;
+
     private PassListFragment.OnItemClickedListener mCallback;
 
     public interface OnItemClickedListener {
@@ -42,19 +42,21 @@ public class PassListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pass_list,container,false);
 
+        groupWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity)getActivity()).getGroupPosition());
 
         rvPassList = (RecyclerView) rootView.findViewById(R.id.rvPassList);
         final PassListAdapter passListAdapter = new PassListAdapter(rvPassList.getContext());
+        passListAdapter.setParentActivity(getActivity());
         rvPassList.setAdapter(passListAdapter);
         rvPassList.setLayoutManager(new LinearLayoutManager(rvPassList.getContext()));
-        passListAdapter.setPass(groupWithPass.passList);
 
-        passViewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        passViewModel.getGroupsWithPass().observe(this, new Observer<List<GroupWithPass>>() {
+
+        LiveData<List<GroupWithPass>> groupsWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass();
+        groupsWithPass.observe(this, new Observer<List<GroupWithPass>>() {
             @Override
             public void onChanged(List<GroupWithPass> groupsWithPass) {
-                //passListAdapter.setGroupsWithPass(groupsWithPass);
+                passListAdapter.setPass(groupsWithPass.get(((MainActivity)getActivity()).getGroupPosition()).passList);
             }
         });
 
@@ -63,7 +65,7 @@ public class PassListFragment extends Fragment {
         bBackPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(groups);
+                ((MainActivity)getActivity()).showGroupList();
             }
         });
 
@@ -77,7 +79,7 @@ public class PassListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
- //       this.createCallbackToParentActivity();
+
     }
 
     @Override
@@ -96,17 +98,10 @@ public class PassListFragment extends Fragment {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
 
-                        ((MainActivity)getActivity()).show(groupWithPass.passList.get(position),false,position);
+                        ((MainActivity)getActivity()).showPass(false,false,position);
                     }
                 });
     }
 
-    public void updatePassGroup(GroupWithPass grp,LiveData<List<GroupWithPass>> groupLst)
-    {
-        groupWithPass = grp;
-        groups = groupLst;
-
-
-    }
 
 }

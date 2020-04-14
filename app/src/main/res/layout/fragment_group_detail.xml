@@ -121,6 +121,21 @@
         android:src="@drawable/ic_save_black_24dp" />
 
     <ImageButton
+        android:id="@+id/bEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/bEdit.hint"
+        app:srcCompat="@drawable/ic_edit_black_24dp"
+        android:background="@android:color/white"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bBackPage"
+        />
+
+    <ImageButton
         android:id="@+id/bBackPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -147,6 +162,20 @@
         android:minWidth="24dp"
         android:minHeight="24dp"
         android:src="@drawable/ic_close_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/bBackPage"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bdelete.hint"
+        android:maxWidth="24dp"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        android:minHeight="24dp"
+        android:src="@drawable/ic_delete_black_24dp" />
 
     <ImageButton
         android:id="@+id/bNext"

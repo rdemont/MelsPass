@@ -1,7 +1,9 @@
 package ch.rmbi.melspass.view;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,10 +39,11 @@ public class PassDetailFragment extends Fragment {
     EditText etUrl;
     EditText etDescription;
     Spinner sGroup;
-    Pass pass;
-    GroupWithPass groupWithPas;
-    int position =0;
+    Pass pass = null;
+    //GroupWithPass groupWithPas;
+    //int position =0;
     boolean readWrite = false;
+    boolean isNew = false ;
     String groupsName[] ;
     Long groupsId[];
 
@@ -51,11 +54,13 @@ public class PassDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pass_detail,container,false);
 
-
+        if (!isNew) {
+            pass = ((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.get(((MainActivity) getActivity()).getPassPosition());
+        }
 
         repository = new Repository(getActivity().getApplication());
-
         List<Group> groups = repository.getGroups();
+
         groupsName = new String[groups.size()];
         groupsId = new Long[groups.size()];
         for (int i=0;i<groups.size();i++)
@@ -88,19 +93,66 @@ public class PassDetailFragment extends Fragment {
             etUserPass.setText(pass.getUserPass());
             etUrl.setText(pass.getUrl());
             etDescription.setText(pass.getDescription());
-
-            for (int i = 0; i < groupsId.length; i++) {
-                if (groupsId[i] == pass.getGroup_id())
-                    sGroup.setSelection(i);
-            }
         }
 
 
+        for (int i = 0; i < groupsId.length; i++) {
+            if (pass == null)
+            {
+                sGroup.setSelection(((MainActivity)getActivity()).getGroupPosition());
+            }else {
+                if (groupsId[i] == pass.getGroup_id()) {
+                    sGroup.setSelection(i);
+                }
+            }
+
+
+        }
+
+
+        ImageButton bDelete = (ImageButton) rootView.findViewById(R.id.bDelete);
+        bDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle(R.string.Delete);
+                alert.setMessage(R.string.Delete_Msg);
+                alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        repository.delete(pass);
+                        if (((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.size() <= 1)
+                        {
+                            ((MainActivity) getActivity()).showGroupList();
+                        }else {
+                            ((MainActivity) getActivity()).showPassList();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((MainActivity)getActivity()).showPass(readWrite,isNew);
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.create().show();
+            }
+        });
+        ImageButton bEdit = (ImageButton) rootView.findViewById(R.id.bEdit);
+        bEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).showPass(true);
+            }
+        });
         ImageButton bCancel = (ImageButton) rootView.findViewById(R.id.bCancel);
         bCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(pass,false,position);
+                ((MainActivity)getActivity()).showPass(false);
             }
         });
         ImageButton bSave = (ImageButton) rootView.findViewById(R.id.bSave);
@@ -118,7 +170,7 @@ public class PassDetailFragment extends Fragment {
 
                     repository.update(pass);
 
-                    ((MainActivity)getActivity()).show(pass,false,position);
+
                 }else {
                     pass = new Pass(
                             groupsId[sGroup.getSelectedItemPosition()] ,
@@ -129,8 +181,8 @@ public class PassDetailFragment extends Fragment {
                             etDescription.getText().toString()
                     );
                     repository.insert(pass);
-                    ((MainActivity)getActivity()).show();
                 }
+                ((MainActivity)getActivity()).showPassList();
 
             }
         });
@@ -190,28 +242,28 @@ public class PassDetailFragment extends Fragment {
         bBackPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(groupWithPas);
+                ((MainActivity)getActivity()).showPassList();
             }
         });
         ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
         bPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(pass,false,--position);
+                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getPassPosition()-1);
             }
         });
         ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
         bFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(pass,false,0);
+                ((MainActivity)getActivity()).showPass(readWrite,false,0);
             }
         });
         ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(pass,false,++position);
+                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getPassPosition()+1);
             }
         });
 
@@ -219,7 +271,7 @@ public class PassDetailFragment extends Fragment {
         bLast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(pass,false,groupWithPas.passList.size()-1);
+                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1);
             }
         });
 
@@ -228,6 +280,8 @@ public class PassDetailFragment extends Fragment {
             bCancel.setVisibility(View.VISIBLE);
             bSave.setVisibility(View.VISIBLE);
 
+            bDelete.setVisibility(View.INVISIBLE);
+            bEdit.setVisibility(View.INVISIBLE);
             bPrevious.setVisibility(View.INVISIBLE);
             bFirst.setVisibility(View.INVISIBLE);
             bNext.setVisibility(View.INVISIBLE);
@@ -236,8 +290,11 @@ public class PassDetailFragment extends Fragment {
         }else{
             bCancel.setVisibility(View.INVISIBLE);
             bSave.setVisibility(View.INVISIBLE);
+
+            bDelete.setVisibility(View.VISIBLE);
+            bEdit.setVisibility(View.VISIBLE);
             bBackPage.setVisibility(View.VISIBLE);
-            if (position == 0)
+            if (((MainActivity) getActivity()).getPassPosition() == 0)
             {
                 bPrevious.setVisibility(View.INVISIBLE);
                 bFirst.setVisibility(View.INVISIBLE);
@@ -246,7 +303,7 @@ public class PassDetailFragment extends Fragment {
                 bFirst.setVisibility(View.VISIBLE);
             }
 
-            if (position == groupWithPas.passList.size()-1)
+            if (((MainActivity) getActivity()).getPassPosition() == ((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1)
             {
                 bNext.setVisibility(View.INVISIBLE);
                 bLast.setVisibility(View.INVISIBLE);
@@ -260,15 +317,9 @@ public class PassDetailFragment extends Fragment {
 
     }
 
-    public void updatePass(Pass pssObj,GroupWithPass gWithp,int pos)
-    {
-        pass = pssObj ;
-        groupWithPas = gWithp;
-        position = pos;
-    }
-
     public void setReadWrite(boolean rWrite)
     {
         readWrite = rWrite;
     }
+    public void setisNew(boolean isNe) {isNew = isNe;}
 }

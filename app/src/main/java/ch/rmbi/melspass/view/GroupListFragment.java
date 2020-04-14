@@ -27,7 +27,9 @@ import ch.rmbi.melspass.utils.Session;
 public class GroupListFragment extends OwnFragment  {
 
     RecyclerView rvGroups;
-    private LiveData<List<GroupWithPass>> groupsWithPath;
+    private LiveData<List<GroupWithPass>> groupsWithPass;
+
+
 
     @Nullable
     @Override
@@ -40,8 +42,8 @@ public class GroupListFragment extends OwnFragment  {
         rvGroups.setAdapter(groupListAdapter);
         rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        groupsWithPath.observe(this, new Observer<List<GroupWithPass>>() {
+        groupsWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass();
+        groupsWithPass.observe(this, new Observer<List<GroupWithPass>>() {
             @Override
             public void onChanged(List<GroupWithPass> groupsWithPass) {
                 groupListAdapter.setGroupsWithPass(groupsWithPass);
@@ -62,16 +64,8 @@ public class GroupListFragment extends OwnFragment  {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        List<GroupWithPass> listGroup = groupsWithPath.getValue();
-                        listGroup.get(position);
-                        ((MainActivity)getActivity()).show(listGroup.get(position),position);
+                        ((MainActivity)getActivity()).showPassList(position);
                     }
                 });
     }
-
-    public void setGroups(LiveData<List<GroupWithPass>> groups)
-    {
-        groupsWithPath = groups;
-    }
-
 }

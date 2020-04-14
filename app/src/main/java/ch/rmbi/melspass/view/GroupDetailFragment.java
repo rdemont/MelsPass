@@ -1,5 +1,7 @@
 package ch.rmbi.melspass.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,9 +26,6 @@ import ch.rmbi.melspass.room.Repository;
 public class GroupDetailFragment extends Fragment {
 
     Group group;
-    //GroupWithPass groupWithPas;
-    LiveData<List<GroupWithPass>> groups;
-    int position =0;
 
     EditText etName;
     EditText etDescription;
@@ -35,13 +34,16 @@ public class GroupDetailFragment extends Fragment {
     Repository repository ;
 
     boolean readWrite = false;
+    boolean isNew = false ;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_group_detail,container,false);
 
-
+        if (!isNew) {
+            group = ((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).group;
+        }
         etName = (EditText)rootView.findViewById(R.id.etName);
         etName.setEnabled(readWrite);
         etDescription = (EditText)rootView.findViewById(R.id.etDescription);
@@ -54,11 +56,48 @@ public class GroupDetailFragment extends Fragment {
         }
         repository = new Repository(getActivity().getApplication());
 
+
+        ImageButton bDelete = (ImageButton) rootView.findViewById(R.id.bDelete);
+        bDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle(R.string.Delete);
+                alert.setMessage(R.string.Delete_Msg);
+                alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        repository.delete(group);
+                        ((MainActivity)getActivity()).showGroupList();
+                        dialog.dismiss();
+                    }
+                });
+                alert.setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((MainActivity)getActivity()).showGroup(readWrite,false);
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.create().show();
+            }
+        });
+
+
+        ImageButton bEdit = (ImageButton) rootView.findViewById(R.id.bEdit);
+        bEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).showGroup(true,isNew);
+            }
+        });
+
         ImageButton bCancel = (ImageButton) rootView.findViewById(R.id.bCancel);
         bCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(group,false,position);
+                ((MainActivity)getActivity()).showGroup(false,isNew);
             }
         });
         ImageButton bSave = (ImageButton) rootView.findViewById(R.id.bSave);
@@ -69,19 +108,15 @@ public class GroupDetailFragment extends Fragment {
                     group.setName(etName.getText().toString());
                     group.setDescription(etDescription.getText().toString());
 
-
                     repository.update(group);
-
-                    ((MainActivity)getActivity()).show(group,false,position);
                 }else {
                     group = new Group(
                             etName.getText().toString(),
                             etDescription.getText().toString()
                     );
                     repository.insert(group);
-
-                    ((MainActivity)getActivity()).show(groups);
                 }
+                ((MainActivity)getActivity()).showGroupList();
 
             }
         });
@@ -90,28 +125,28 @@ public class GroupDetailFragment extends Fragment {
         bBackPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(groups);
+                ((MainActivity)getActivity()).showGroupList();
             }
         });
         ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
         bPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(group,false,--position);
+                ((MainActivity)getActivity()).showGroup(false,false,((MainActivity)getActivity()).getGroupPosition()-1);
             }
         });
         ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
         bFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(group,false,0);
+                ((MainActivity)getActivity()).showGroup(false,false,0);
             }
         });
         ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(group,false,++position);
+                ((MainActivity)getActivity()).showGroup(false,false,((MainActivity)getActivity()).getGroupPosition()+1);
             }
         });
 
@@ -119,7 +154,7 @@ public class GroupDetailFragment extends Fragment {
         bLast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).show(group,false,groups.getValue().size()-1);
+                ((MainActivity)getActivity()).showGroup(false,false,((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().size()-1);
             }
         });
 
@@ -127,6 +162,8 @@ public class GroupDetailFragment extends Fragment {
         if (readWrite) {
             bCancel.setVisibility(View.VISIBLE);
             bSave.setVisibility(View.VISIBLE);
+            bEdit.setVisibility(View.INVISIBLE);
+            bDelete.setVisibility(View.INVISIBLE);
 
             bPrevious.setVisibility(View.INVISIBLE);
             bFirst.setVisibility(View.INVISIBLE);
@@ -136,8 +173,14 @@ public class GroupDetailFragment extends Fragment {
         }else{
             bCancel.setVisibility(View.INVISIBLE);
             bSave.setVisibility(View.INVISIBLE);
+            bEdit.setVisibility(View.VISIBLE);
+            if (((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity)getActivity()).getGroupPosition()).passList.size() <= 0)
+            {
+                bDelete.setVisibility(View.VISIBLE);
+            }
+
             bBackPage.setVisibility(View.VISIBLE);
-            if (position == 0)
+            if (((MainActivity)getActivity()).getGroupPosition() == 0)
             {
                 bPrevious.setVisibility(View.INVISIBLE);
                 bFirst.setVisibility(View.INVISIBLE);
@@ -146,7 +189,7 @@ public class GroupDetailFragment extends Fragment {
                 bFirst.setVisibility(View.VISIBLE);
             }
 
-            if (position == groups.getValue().size()-1)
+            if (((MainActivity)getActivity()).getGroupPosition() == ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().size()-1)
             {
                 bNext.setVisibility(View.INVISIBLE);
                 bLast.setVisibility(View.INVISIBLE);
@@ -160,15 +203,11 @@ public class GroupDetailFragment extends Fragment {
         return rootView;
     }
 
-
-    public void updateGroup(Group grpObj, LiveData<List<GroupWithPass>> grps, int pos)
+    public void setisNew(boolean isNe)
     {
-        group = grpObj ;
-
-        //groupWithPas = gWithp;
-        groups = grps;
-        position = pos;
+        isNew = isNe;
     }
+
 
     public void setReadWrite(boolean rWrite)
     {

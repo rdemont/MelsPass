@@ -14,7 +14,4 @@
         android:icon="@drawable/ic_add_circle_black_24dp"
         android:title="@string/group.add"
         ></item>
-    <item
-        android:id="@+id/action_edit_pass"
-        android:title="@string/Pass.edit" />
 </menu>

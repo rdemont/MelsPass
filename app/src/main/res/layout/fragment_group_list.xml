@@ -9,9 +9,9 @@
         android:id="@+id/rvGroups"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:footerDividersEnabled="false"
         android:divider="@color/material_blue_grey_800"
         android:dividerHeight="1dp"
-        android:footerDividersEnabled="false"
         android:listSelector="#0f0"
         tools:listitem="@layout/group_list_layout" />
 

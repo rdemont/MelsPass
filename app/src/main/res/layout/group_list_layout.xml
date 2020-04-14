@@ -2,22 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlGroupListItem"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingBottom="10dp"
-    android:layout_marginTop="20dp">
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:minWidth="100dp"
+        android:layout_alignParentTop="true"
         android:maxWidth="100dp"
-         />
+        android:minWidth="100dp"
+        app:srcCompat="@drawable/ic_adb_black_24dp" />
 
     <TextView
         android:id="@+id/tvGroupName"
@@ -51,31 +52,15 @@
         android:id="@+id/bEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/bEdit.hint"
-        app:srcCompat="@drawable/ic_edit_black_24dp"
-        android:background="@android:color/white"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:maxWidth="24dp"
-        android:maxHeight="24dp"
-        android:minWidth="24dp"
-        android:minHeight="24dp"
-        />
-
-    <ImageButton
-        android:id="@+id/bDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/bdelete.hint"
-        app:srcCompat="@drawable/ic_delete_black_24dp"
         android:background="@android:color/white"
-        android:layout_below="@id/bEdit"
-        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/bEdit.hint"
         android:maxWidth="24dp"
         android:maxHeight="24dp"
         android:minWidth="24dp"
         android:minHeight="24dp"
-        />
+        app:srcCompat="@drawable/ic_keyboard_capslock_black_24dp" />
 
 
 </RelativeLayout>
