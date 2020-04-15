@@ -29,10 +29,12 @@ import ch.rmbi.melspass.room.Group;
 import ch.rmbi.melspass.room.GroupWithPass;
 import ch.rmbi.melspass.room.Pass;
 import ch.rmbi.melspass.room.Repository;
+import ch.rmbi.melspass.view.DialogFragment.PasswordGeneratorDialogFragment;
 
 
-public class PassDetailFragment extends Fragment {
+public class PassDetailFragment extends Fragment implements PasswordGeneratorDialogFragment.PasswordGeneratorDialogListener {
 
+    PassDetailFragment me = this;
     EditText etName;
     EditText etUserName;
     EditText etUserPass;
@@ -230,6 +232,22 @@ public class PassDetailFragment extends Fragment {
             }
         });
 
+        ImageButton bPasswordGenerator = (ImageButton) rootView.findViewById(R.id.bPasswordGenerator);
+        bPasswordGenerator.setVisibility(View.VISIBLE);
+        if (!readWrite) {
+            bPasswordGenerator.setVisibility(View.INVISIBLE);
+        }
+        bPasswordGenerator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PasswordGeneratorDialogFragment dialog = new PasswordGeneratorDialogFragment();
+                dialog.setListener(me);
+                dialog.show(getParentFragmentManager(), "NoticeDialogFragment");
+
+
+            }
+        });
+
         ImageButton bOpenUrl = (ImageButton) rootView.findViewById(R.id.bOpenUrl);
         bOpenUrl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -322,4 +340,10 @@ public class PassDetailFragment extends Fragment {
         readWrite = rWrite;
     }
     public void setisNew(boolean isNe) {isNew = isNe;}
+
+    @Override
+    public void onPasswordGenerate(char[] password) {
+        if ((etUserPass != null) && (readWrite))
+            etUserPass.setText(String.valueOf(password));
+    }
 }

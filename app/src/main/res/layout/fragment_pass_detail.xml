@@ -115,8 +115,23 @@
         android:inputType="textPassword"
         android:autofillHints="" />
 
+
     <ImageButton
         android:id="@+id/bShowUserPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etUserPass"
+        android:layout_toStartOf="@id/bPasswordGenerator"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bShowPassword"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_remove_red_eye_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bPasswordGenerator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/etUserPass"
@@ -127,7 +142,7 @@
         android:maxHeight="24dip"
         android:minWidth="24dip"
         android:minHeight="24dip"
-        android:src="@drawable/ic_remove_red_eye_black_24dp" />
+        android:src="@drawable/ic_loop_black_24dp" />
 
     <ImageButton
         android:id="@+id/bCopyUserPass"
