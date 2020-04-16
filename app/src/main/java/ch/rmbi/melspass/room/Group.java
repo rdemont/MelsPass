@@ -13,9 +13,10 @@ import java.util.List;
 @Entity(tableName = "Group_tbl")
 public class Group {
 
-    public Group(String name, String description) {
+    public Group(String name, String description,int imageIndex) {
         this.name = name;
         this.description = description;
+        this.imageIndex = imageIndex;
     }
 
     @NonNull
@@ -26,6 +27,18 @@ public class Group {
 
     private String description ;
 
+
+    private int imageIndex ;
+
+
+
+    public int getImageIndex() {
+        return imageIndex;
+    }
+
+    public void setImageIndex(int imageIndex) {
+        this.imageIndex = imageIndex;
+    }
 
 
     public long getId() {

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,8 @@ import java.util.List;
 
 import ch.rmbi.melspass.R;
 import ch.rmbi.melspass.room.GroupWithPass;
+import ch.rmbi.melspass.utils.Icon;
+import ch.rmbi.melspass.utils.IconList;
 import ch.rmbi.melspass.view.MainActivity;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.GroupViewHolder> {
@@ -36,7 +39,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         private final TextView tvPassCount;
         private final ImageButton bEdit;
         private final RelativeLayout rlGroupListItem;
-
+        private final ImageView ivIcon;
 
         private GroupViewHolder(View itemView) {
             super(itemView);
@@ -45,7 +48,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             tvPassCount = itemView.findViewById(R.id.tvPassCount);
             bEdit = itemView.findViewById(R.id.bEdit);
             rlGroupListItem = itemView.findViewById(R.id.rlGroupListItem);
-
+            ivIcon = itemView.findViewById(R.id.ivIcon);
 
 
         }
@@ -73,6 +76,9 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         holder.tvGroupName.setText(current.group.getName());
         holder.tvDescription.setText(current.group.getDescription());
         holder.tvPassCount.setText(String.valueOf(current.passList.size()));
+        Icon icon = IconList.getInstance(parentActivity.getBaseContext()).getIcon(current.group.getImageIndex());
+        holder.ivIcon.setImageDrawable(icon.getDrawable());
+        holder.ivIcon.setContentDescription(icon.getDescription());
 
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Group.class,Pass.class}, version = 2, exportSchema = false)
+@Database(entities = {Group.class,Pass.class}, version = 3, exportSchema = false)
 abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
 
     abstract PassDao passDao();
@@ -32,6 +32,7 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
                             LocalRoomDatabase.class, "group_database")
                             .addCallback(sRoomDatabaseCallback)
                             .addMigrations(MIGRATION_1_2)
+                            .addMigrations(MIGRATION_2_3)
                             .allowMainThreadQueries()
                             .build();
                 }
@@ -90,6 +91,15 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
             database.execSQL("ALTER TABLE Pass_tbl ADD COLUMN name TEXT");
         }
     };
+
+
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Group_tbl ADD COLUMN imageIndex INTEGER NOT NULL DEFAULT -1");
+        }
+    };
+
 
 }
 

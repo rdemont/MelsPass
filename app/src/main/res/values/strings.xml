@@ -1,8 +1,6 @@
 <resources>
-    <string name="app_name">MelsPass</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Mel\'s Pass</string>
+    <string name="welcom_fragment">Hello blank fragment it\'s the Welcome Fragment</string>
     <string name="Pass_edit_label_width">100dip</string>
     <string name="tvUrl">Url :</string>
     <string name="tvPassword">Password :</string>
@@ -41,4 +39,12 @@
     <string name="dialog_password_lowercase">Minuscule</string>
     <string name="dialog_password_number">Numérique</string>
     <string name="dialog_password_specialchar">Caractères spéciaux</string>
+    <string name="icon_star_24dp">Etoile</string>
+    <string name="icon_cake_24dp">Gateau</string>
+    <string name="icon_location_city_24dp">Ville</string>
+    <string name="DrawablePicker.Title">Choix de l\'image du groupe</string>
+    <string name="close">Fermer</string>
+    <string name="ic_adb_black_24dp">Android logo</string>
+
+
 </resources>

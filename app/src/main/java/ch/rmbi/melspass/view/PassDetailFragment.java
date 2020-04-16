@@ -42,14 +42,13 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
     EditText etDescription;
     Spinner sGroup;
     Pass pass = null;
-    //GroupWithPass groupWithPas;
-    //int position =0;
+
     boolean readWrite = false;
     boolean isNew = false ;
     String groupsName[] ;
     Long groupsId[];
 
-    Repository repository ;
+    //Repository repository ;
 
     @Nullable
     @Override
@@ -57,18 +56,17 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
         View rootView = inflater.inflate(R.layout.fragment_pass_detail,container,false);
 
         if (!isNew) {
-            pass = ((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.get(((MainActivity) getActivity()).getPassPosition());
+            pass = ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.get(((MainActivity) getActivity()).getPassPosition());
         }
 
-        repository = new Repository(getActivity().getApplication());
-        List<Group> groups = repository.getGroups();
+        List<GroupWithPass> groups = ((MainActivity)getActivity()).getGroupsWithPass();
 
         groupsName = new String[groups.size()];
         groupsId = new Long[groups.size()];
         for (int i=0;i<groups.size();i++)
         {
-            groupsName[i] = groups.get(i).getName();
-            groupsId[i] = groups.get(i).getId();
+            groupsName[i] = groups.get(i).group.getName();
+            groupsId[i] = groups.get(i).group.getId();
         }
 
         etName = (EditText)rootView.findViewById(R.id.etName);
@@ -122,8 +120,8 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                 alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        repository.delete(pass);
-                        if (((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.size() <= 1)
+                        ((MainActivity)getActivity()).getGroupViewModel().delete(pass);
+                        if (((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size() <= 1)
                         {
                             ((MainActivity) getActivity()).showGroupList();
                         }else {
@@ -170,7 +168,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                     pass.setGroup_id(groupsId[sGroup.getSelectedItemPosition()]);
 
 
-                    repository.update(pass);
+                    ((MainActivity)getActivity()).getGroupViewModel().update(pass);
 
 
                 }else {
@@ -182,7 +180,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                             etUrl.getText().toString(),
                             etDescription.getText().toString()
                     );
-                    repository.insert(pass);
+                    ((MainActivity)getActivity()).getGroupViewModel().insert(pass);
                 }
                 ((MainActivity)getActivity()).showPassList();
 
@@ -289,7 +287,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
         bLast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1);
+                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1);
             }
         });
 
@@ -321,7 +319,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                 bFirst.setVisibility(View.VISIBLE);
             }
 
-            if (((MainActivity) getActivity()).getPassPosition() == ((MainActivity) getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1)
+            if (((MainActivity) getActivity()).getPassPosition() == ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1)
             {
                 bNext.setVisibility(View.INVISIBLE);
                 bLast.setVisibility(View.INVISIBLE);

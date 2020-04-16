@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Icons>
+    <Icon index="1">
+        <Drawable>icon_star_24dp</Drawable>
+        <String>icon_star_24dp</String>
+    </Icon>
+    <Icon index="2" >
+        <Drawable>icon_cake_24dp</Drawable>
+        <String>icon_cake_24dp</String>
+    </Icon>
+    <Icon index="3" >
+        <Drawable>icon_location_city_24dp</Drawable>
+        <String>icon_location_city_24dp</String>
+    </Icon>
+    <Icon index="4" default="true">
+        <Drawable>ic_adb_black_24dp</Drawable>
+        <String>ic_adb_black_24dp</String>
+    </Icon>
+</Icons>

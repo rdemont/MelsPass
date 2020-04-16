@@ -42,7 +42,8 @@ public class PassListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pass_list,container,false);
 
-        groupWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity)getActivity()).getGroupPosition());
+        groupWithPass =((MainActivity)getActivity()).getGroupsWithPass().get(((MainActivity)getActivity()).getGroupPosition());
+                //((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity)getActivity()).getGroupPosition());
 
         rvPassList = (RecyclerView) rootView.findViewById(R.id.rvPassList);
         final PassListAdapter passListAdapter = new PassListAdapter(rvPassList.getContext());
@@ -50,8 +51,9 @@ public class PassListFragment extends Fragment {
         rvPassList.setAdapter(passListAdapter);
         rvPassList.setLayoutManager(new LinearLayoutManager(rvPassList.getContext()));
 
+        passListAdapter.setPass(groupWithPass.passList);
 
-
+/*
         LiveData<List<GroupWithPass>> groupsWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass();
         groupsWithPass.observe(this, new Observer<List<GroupWithPass>>() {
             @Override
@@ -60,7 +62,7 @@ public class PassListFragment extends Fragment {
             }
         });
 
-
+*/
         ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
         bBackPage.setOnClickListener(new View.OnClickListener() {
             @Override

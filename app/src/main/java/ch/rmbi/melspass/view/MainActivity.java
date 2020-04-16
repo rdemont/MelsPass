@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.res.Configuration;
@@ -11,7 +12,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import ch.rmbi.melspass.R;
+import ch.rmbi.melspass.room.GroupWithPass;
 import ch.rmbi.melspass.room.ViewModel;
 
 
@@ -28,9 +32,17 @@ public class MainActivity extends AppCompatActivity  {
     private int groupPosition = 0;
     private int passPosition = 0;
 
+    public List<GroupWithPass> getGroupsWithPass() {
+        return groupsWithPass;
+    }
+
+    private List<GroupWithPass> groupsWithPass;
+
     public ViewModel getGroupViewModel() {
         return groupViewModel;
     }
+
+
 
     public int getGroupPosition() {
         return groupPosition;
@@ -49,7 +61,19 @@ public class MainActivity extends AppCompatActivity  {
 
         groupViewModel = new ViewModelProvider(this).get(ViewModel .class);
 
-        show();
+        groupViewModel.getGroupsWithPass().observe(this, new Observer<List<GroupWithPass>>() {
+            @Override
+            public void onChanged(List<GroupWithPass> grpWithPass) {
+                boolean isFirst = groupsWithPass== null ;
+                groupsWithPass = grpWithPass;
+                if(isFirst){
+                    show();
+                }
+
+            }
+        });
+
+
     }
 
     @Override
