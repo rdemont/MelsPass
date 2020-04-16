@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.util.List;
-
 import ch.rmbi.melspass.R;
 import ch.rmbi.melspass.room.Group;
-import ch.rmbi.melspass.room.GroupWithPass;
-import ch.rmbi.melspass.room.Pass;
-import ch.rmbi.melspass.room.Repository;
 import ch.rmbi.melspass.utils.Icon;
 import ch.rmbi.melspass.utils.IconList;
 import ch.rmbi.melspass.view.DialogFragment.DrawablePickerDialogFragment;
-import ch.rmbi.melspass.view.DialogFragment.PasswordGeneratorDialogFragment;
 
 
 public class GroupDetailFragment extends Fragment implements DrawablePickerDialogFragment.DrawablePickerDialogListener {
@@ -91,7 +84,7 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
                 alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity)getActivity()).getGroupViewModel().delete(group);
+                        ((MainActivity)getActivity()).getViewModel().delete(group);
                         ((MainActivity)getActivity()).showGroupList();
                         dialog.dismiss();
                     }
@@ -137,7 +130,7 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
                     group.setName(etName.getText().toString());
                     group.setDescription(etDescription.getText().toString());
                     group.setImageIndex(iicon);
-                    ((MainActivity)getActivity()).getGroupViewModel().update(group);
+                    ((MainActivity)getActivity()).getViewModel().update(group);
                 }else {
 
 
@@ -146,7 +139,7 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
                             etDescription.getText().toString(),
                             iicon
                     );
-                    ((MainActivity)getActivity()).getGroupViewModel().insert(group);
+                    ((MainActivity)getActivity()).getViewModel().insert(group);
                 }
                 ((MainActivity)getActivity()).showGroupList();
 

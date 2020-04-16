@@ -25,10 +25,8 @@ import android.widget.Spinner;
 import java.util.List;
 
 import ch.rmbi.melspass.R;
-import ch.rmbi.melspass.room.Group;
 import ch.rmbi.melspass.room.GroupWithPass;
 import ch.rmbi.melspass.room.Pass;
-import ch.rmbi.melspass.room.Repository;
 import ch.rmbi.melspass.view.DialogFragment.PasswordGeneratorDialogFragment;
 
 
@@ -120,7 +118,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                 alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity)getActivity()).getGroupViewModel().delete(pass);
+                        ((MainActivity)getActivity()).getViewModel().delete(pass);
                         if (((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size() <= 1)
                         {
                             ((MainActivity) getActivity()).showGroupList();
@@ -168,7 +166,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                     pass.setGroup_id(groupsId[sGroup.getSelectedItemPosition()]);
 
 
-                    ((MainActivity)getActivity()).getGroupViewModel().update(pass);
+                    ((MainActivity)getActivity()).getViewModel().update(pass);
 
 
                 }else {
@@ -180,7 +178,7 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                             etUrl.getText().toString(),
                             etDescription.getText().toString()
                     );
-                    ((MainActivity)getActivity()).getGroupViewModel().insert(pass);
+                    ((MainActivity)getActivity()).getViewModel().insert(pass);
                 }
                 ((MainActivity)getActivity()).showPassList();
 

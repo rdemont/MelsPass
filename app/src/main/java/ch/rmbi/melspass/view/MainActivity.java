@@ -3,7 +3,6 @@ package ch.rmbi.melspass.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
     private boolean isLargeScreen = false ;
-    private ViewModel groupViewModel ;
+    private ViewModel viewModel;
 
     private int groupPosition = 0;
     private int passPosition = 0;
@@ -38,8 +37,8 @@ public class MainActivity extends AppCompatActivity  {
 
     private List<GroupWithPass> groupsWithPass;
 
-    public ViewModel getGroupViewModel() {
-        return groupViewModel;
+    public ViewModel getViewModel() {
+        return viewModel;
     }
 
 
@@ -59,9 +58,9 @@ public class MainActivity extends AppCompatActivity  {
 
         isLargeScreen = findViewById(R.id.frame_layout_detail) != null;
 
-        groupViewModel = new ViewModelProvider(this).get(ViewModel .class);
+        viewModel = new ViewModelProvider(this).get(ViewModel .class);
 
-        groupViewModel.getGroupsWithPass().observe(this, new Observer<List<GroupWithPass>>() {
+        viewModel.getGroupsWithPass().observe(this, new Observer<List<GroupWithPass>>() {
             @Override
             public void onChanged(List<GroupWithPass> grpWithPass) {
                 boolean isFirst = groupsWithPass== null ;
