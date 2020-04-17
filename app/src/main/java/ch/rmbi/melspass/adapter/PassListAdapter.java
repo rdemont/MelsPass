@@ -67,12 +67,13 @@ public class PassListAdapter extends RecyclerView.Adapter<PassListAdapter.PassVi
             holder.tvUsername.setText("No Word");
         }
 
-        if(((MainActivity)parentActivity).getPassPosition()==position){
-            holder.rlPassListItem.setBackgroundColor(Color.parseColor("#59a6f7"));
+
+        if(((MainActivity)parentActivity).getGroupPosition()==position){
+            holder.rlPassListItem.setSelected(true);
         }
         else
         {
-            holder.rlPassListItem.setBackgroundColor(Color.parseColor("#ffffff"));
+            holder.rlPassListItem.setSelected(false);
         }
     }
 

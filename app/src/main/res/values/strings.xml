@@ -45,6 +45,7 @@
     <string name="DrawablePicker.Title">Choix de l\'image du groupe</string>
     <string name="close">Fermer</string>
     <string name="ic_adb_black_24dp">Android logo</string>
+    <string name="groupList_title">Liste des groupes</string>
 
 
 </resources>

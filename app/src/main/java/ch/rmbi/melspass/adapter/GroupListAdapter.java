@@ -73,6 +73,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
 
         GroupWithPass current = groupsWithPass.get(position);
+
         holder.tvGroupName.setText(current.group.getName());
         holder.tvDescription.setText(current.group.getDescription());
         holder.tvPassCount.setText(String.valueOf(current.passList.size()));
@@ -89,12 +90,13 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         });
 
         if(((MainActivity)parentActivity).getGroupPosition()==position){
-            holder.rlGroupListItem.setBackgroundColor(Color.parseColor("#59a6f7"));
+            holder.rlGroupListItem.setSelected(true);
         }
         else
         {
-            holder.rlGroupListItem.setBackgroundColor(Color.parseColor("#ffffff"));
+            holder.rlGroupListItem.setSelected(false);
         }
+
 
     }
 

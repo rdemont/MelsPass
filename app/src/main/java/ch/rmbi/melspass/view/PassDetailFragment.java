@@ -30,7 +30,7 @@ import ch.rmbi.melspass.room.Pass;
 import ch.rmbi.melspass.view.DialogFragment.PasswordGeneratorDialogFragment;
 
 
-public class PassDetailFragment extends Fragment implements PasswordGeneratorDialogFragment.PasswordGeneratorDialogListener {
+public class PassDetailFragment extends TemplateFragment implements PasswordGeneratorDialogFragment.PasswordGeneratorDialogListener {
 
     PassDetailFragment me = this;
     EditText etName;
@@ -48,14 +48,33 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
 
     //Repository repository ;
 
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.fragment_pass_detail;
+    }
+
+    @Override
+    protected String getFragmentTitle() {
+        return "Détail du password ";
+    }
+
+
+
+    @Override
+    protected int getFragmentButtonVisible() {
+        return showButton;
+    }
+    int showButton = 0 ;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_pass_detail,container,false);
+    public void onCreateAppView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //View rootView = inflater.inflate(R.layout.fragment_pass_detail,container,false);
 
         if (!isNew) {
             pass = ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.get(((MainActivity) getActivity()).getPassPosition());
         }
+        View rootView = getRootView();
 
         List<GroupWithPass> groups = ((MainActivity)getActivity()).getGroupsWithPass();
 
@@ -108,8 +127,8 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
         }
 
 
-        ImageButton bDelete = (ImageButton) rootView.findViewById(R.id.bDelete);
-        bDelete.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bDelete = (ImageButton) rootView.findViewById(R.id.bDelete);
+        getButtonDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -121,9 +140,11 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                         ((MainActivity)getActivity()).getViewModel().delete(pass);
                         if (((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size() <= 1)
                         {
-                            ((MainActivity) getActivity()).showGroupList();
+                            ((MainActivity)getActivity()).setWaitingNext(MainActivity.NEXT_GROUP_LIST);
+                            ((MainActivity)getActivity()).setWaitingLiveDate(true);
                         }else {
-                            ((MainActivity) getActivity()).showPassList();
+                            ((MainActivity)getActivity()).setWaitingNext(MainActivity.NEXT_PASS_LIST);
+                            ((MainActivity)getActivity()).setWaitingLiveDate(true);
                         }
                         dialog.dismiss();
                     }
@@ -139,22 +160,28 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                 alert.create().show();
             }
         });
-        ImageButton bEdit = (ImageButton) rootView.findViewById(R.id.bEdit);
-        bEdit.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bEdit = (ImageButton) rootView.findViewById(R.id.bEdit);
+        getButtonEdit().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showPass(true);
             }
         });
-        ImageButton bCancel = (ImageButton) rootView.findViewById(R.id.bCancel);
-        bCancel.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bCancel = (ImageButton) rootView.findViewById(R.id.bCancel);
+        getButtonCancel().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPass(false);
+                if (isNew)
+                {
+                    ((MainActivity)getActivity()).showPassList();
+                }else {
+                    ((MainActivity)getActivity()).showPass(false);
+                }
+
             }
         });
-        ImageButton bSave = (ImageButton) rootView.findViewById(R.id.bSave);
-        bSave.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bSave = (ImageButton) rootView.findViewById(R.id.bSave);
+        getButtonSave().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pass != null) {
@@ -180,7 +207,9 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                     );
                     ((MainActivity)getActivity()).getViewModel().insert(pass);
                 }
-                ((MainActivity)getActivity()).showPassList();
+                ((MainActivity)getActivity()).setWaitingNext(MainActivity.NEXT_PASS_LIST);
+                ((MainActivity)getActivity()).setWaitingLiveDate(true);
+                //((MainActivity)getActivity()).showPassList();
 
             }
         });
@@ -252,37 +281,37 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
                 startActivity(browserIntent);
             }
         });
-        ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
-        bBackPage.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
+        getButtonBack().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showPassList();
             }
         });
-        ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
-        bPrevious.setOnClickListener(new View.OnClickListener() {
+        ///ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
+        getButtonPrevious().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getPassPosition()-1);
             }
         });
-        ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
-        bFirst.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
+        getButtonFirst().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showPass(readWrite,false,0);
             }
         });
-        ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
-        bNext.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
+        getButtonNext().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getPassPosition()+1);
             }
         });
 
-        ImageButton bLast = (ImageButton) rootView.findViewById(R.id.bLast);
-        bLast.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bLast = (ImageButton) rootView.findViewById(R.id.bLast);
+        getButtonLast().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1);
@@ -291,43 +320,21 @@ public class PassDetailFragment extends Fragment implements PasswordGeneratorDia
 
 
         if (readWrite) {
-            bCancel.setVisibility(View.VISIBLE);
-            bSave.setVisibility(View.VISIBLE);
-
-            bDelete.setVisibility(View.INVISIBLE);
-            bEdit.setVisibility(View.INVISIBLE);
-            bPrevious.setVisibility(View.INVISIBLE);
-            bFirst.setVisibility(View.INVISIBLE);
-            bNext.setVisibility(View.INVISIBLE);
-            bLast.setVisibility(View.INVISIBLE);
-            bBackPage.setVisibility(View.INVISIBLE);
+            showButton = showButton | SHOW_BUTTON_CANCEL | SHOW_BUTTON_SAVE;
         }else{
-            bCancel.setVisibility(View.INVISIBLE);
-            bSave.setVisibility(View.INVISIBLE);
-
-            bDelete.setVisibility(View.VISIBLE);
-            bEdit.setVisibility(View.VISIBLE);
-            bBackPage.setVisibility(View.VISIBLE);
-            if (((MainActivity) getActivity()).getPassPosition() == 0)
+            showButton = showButton | SHOW_BUTTON_DELETE | SHOW_BUTTON_EDIT | SHOW_BUTTON_BACK;
+            if (((MainActivity) getActivity()).getPassPosition() > 0)
             {
-                bPrevious.setVisibility(View.INVISIBLE);
-                bFirst.setVisibility(View.INVISIBLE);
-            }else {
-                bPrevious.setVisibility(View.VISIBLE);
-                bFirst.setVisibility(View.VISIBLE);
+                showButton = showButton | SHOW_BUTTON_PREVIOUS | SHOW_BUTTON_FIRST;
             }
 
-            if (((MainActivity) getActivity()).getPassPosition() == ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1)
+            if (((MainActivity) getActivity()).getPassPosition() < ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1)
             {
-                bNext.setVisibility(View.INVISIBLE);
-                bLast.setVisibility(View.INVISIBLE);
-            }else {
-                bNext.setVisibility(View.VISIBLE);
-                bLast.setVisibility(View.VISIBLE);
+                showButton = showButton | SHOW_BUTTON_NEXT | SHOW_BUTTON_LAST;
             }
         }
 
-        return rootView;
+        ///return rootView;
 
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -25,7 +26,7 @@ import ch.rmbi.melspass.room.ViewModel;
 import ch.rmbi.melspass.utils.ItemClickSupport;
 
 
-public class PassListFragment extends Fragment {
+public class PassListFragment extends TemplateFragment {
 
     RecyclerView rvPassList;
     private ViewModel passViewModel ;
@@ -38,12 +39,29 @@ public class PassListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_pass_list,container,false);
+    protected int getFragmentLayout() {
+        return R.layout.fragment_pass_list ;
+    }
+
+    @Override
+    protected String getFragmentTitle() {
+        return "List des Pasword du group xx";
+    }
+
+
+    @Override
+    protected int getFragmentButtonVisible() {
+        return SHOW_BUTTON_ADD | SHOW_BUTTON_SEARCH | SHOW_BUTTON_BACK ;
+    }
+
+    @Override
+    public void onCreateAppView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //View rootView = inflater.inflate(R.layout.fragment_pass_list,container,false);
 
         groupWithPass =((MainActivity)getActivity()).getGroupsWithPass().get(((MainActivity)getActivity()).getGroupPosition());
                 //((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass().getValue().get(((MainActivity)getActivity()).getGroupPosition());
+
+        View rootView = getRootView();
 
         rvPassList = (RecyclerView) rootView.findViewById(R.id.rvPassList);
         final PassListAdapter passListAdapter = new PassListAdapter(rvPassList.getContext());
@@ -53,18 +71,26 @@ public class PassListFragment extends Fragment {
 
         passListAdapter.setPass(groupWithPass.passList);
 
-/*
-        LiveData<List<GroupWithPass>> groupsWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass();
-        groupsWithPass.observe(this, new Observer<List<GroupWithPass>>() {
+
+
+        //ImageButton bAdd = (ImageButton) rootView.findViewById(R.id.bAdd);
+        getButtonAdd().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(List<GroupWithPass> groupsWithPass) {
-                passListAdapter.setPass(groupsWithPass.get(((MainActivity)getActivity()).getGroupPosition()).passList);
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).showPass(true,true);
             }
         });
 
-*/
-        ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
-        bBackPage.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bSearch = (ImageButton) rootView.findViewById(R.id.bSearch);
+        getButtonSearch().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).showSearch();
+            }
+        });
+
+        //ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
+        getButtonBack().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroupList();
@@ -74,7 +100,7 @@ public class PassListFragment extends Fragment {
 
         this.configureOnClickRecyclerView();
 
-        return rootView;
+        //return rootView;
 
     }
 

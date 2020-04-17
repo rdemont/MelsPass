@@ -4,78 +4,81 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-
-import java.util.List;
 
 import ch.rmbi.melspass.R;
 import ch.rmbi.melspass.adapter.GroupListAdapter;
-import ch.rmbi.melspass.room.GroupWithPass;
-import ch.rmbi.melspass.room.ViewModel;
 import ch.rmbi.melspass.utils.ItemClickSupport;
-import ch.rmbi.melspass.utils.Session;
 
 
-public class GroupListFragment extends OwnFragment  {
+public class GroupListFragment extends TemplateFragment {
 
     RecyclerView rvGroups;
     //private LiveData<List<GroupWithPass>> groupsWithPass;
 
 
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.fragment_group_list;
+    }
+
+    @Override
+    protected String getFragmentTitle() {
+        return "Liste des groupes";
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_group_list,container,false);
+    public void onCreateAppView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //super.onCreateView(inflater,container,savedInstanceState);
 
 
+        View rootView = getRootView();
 
         rvGroups = (RecyclerView) rootView.findViewById(R.id.rvGroups);
         final GroupListAdapter groupListAdapter = new GroupListAdapter(getContext());
         groupListAdapter.setParentActivity(getActivity());
         rvGroups.setAdapter(groupListAdapter);
         rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
-        ImageButton bAddGroup = rootView.findViewById(R.id.bAddGroup);
-        bAddGroup.setVisibility(View.INVISIBLE);
-        rvGroups.setVisibility(View.VISIBLE);
-        //groupsWithPass = ((MainActivity)getActivity()).getGroupViewModel().getGroupsWithPass();
+
+
+
         groupListAdapter.setGroupsWithPass(((MainActivity)getActivity()).getGroupsWithPass());
-        ///groupsWithPass.observe(this, new Observer<List<GroupWithPass>>() {
-//            @Override
-//            public void onChanged(List<GroupWithPass> groupsWithPass) {
-//                groupListAdapter.setGroupsWithPass(groupsWithPass);
-//            }
-//        });
 
         this.configureOnClickRecyclerView();
 
 
-        if ((((MainActivity)getActivity()).getGroupsWithPass().size() <= 0)){
-            bAddGroup.setVisibility(View.VISIBLE);
-            rvGroups.setVisibility(View.INVISIBLE);
-            bAddGroup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)getActivity()).showGroup(true,true);
-                }
-            });
-        }
+
+        //ImageButton bAdd = rootView.findViewById(R.id.bAdd);
+        getButtonAdd().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).showGroup(true,true);
+            }
+        });
+
+        //ImageButton bSearch = rootView.findViewById(R.id.bSearch);
+        getButtonSearch().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).showSearch();
+            }
+        });
 
 
 
-        return rootView;
+
     }
 
-
+    @Override
+    protected int getFragmentButtonVisible() {
+        return SHOW_BUTTON_ADD | SHOW_BUTTON_SEARCH;
+    }
 
 
     private void configureOnClickRecyclerView(){

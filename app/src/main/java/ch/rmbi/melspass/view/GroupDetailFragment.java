@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -20,7 +22,7 @@ import ch.rmbi.melspass.utils.IconList;
 import ch.rmbi.melspass.view.DialogFragment.DrawablePickerDialogFragment;
 
 
-public class GroupDetailFragment extends Fragment implements DrawablePickerDialogFragment.DrawablePickerDialogListener {
+public class GroupDetailFragment extends TemplateFragment implements DrawablePickerDialogFragment.DrawablePickerDialogListener {
 
     Group group;
 
@@ -36,13 +38,30 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
     GroupDetailFragment me = this;
 
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_group_detail,container,false);
+    @Override
+    protected int getFragmentLayout() {
+        return R.layout.fragment_group_detail;
+    }
+
+    @Override
+    protected String getFragmentTitle() {
+        return "Edition";
+    }
+
+
+    @Override
+    protected int getFragmentButtonVisible() {
+        return showButton;
+    }
+    int showButton = 0;
+    public void onCreateAppView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        //View rootView = inflater.inflate(R.layout.fragment_group_detail,container,false);
 
         if (!isNew) {
             group = ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).group;
         }
+        View rootView = getRootView();
+
         etName = (EditText)rootView.findViewById(R.id.etName);
         etName.setEnabled(readWrite);
         etDescription = (EditText)rootView.findViewById(R.id.etDescription);
@@ -74,21 +93,13 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
                 }
             });
         }
-        ImageButton bDelete = (ImageButton) rootView.findViewById(R.id.bDelete);
-        bDelete.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bDelete = (ImageButton) rootView.findViewById(R.id.bDelete);
+        getButtonDelete().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle(R.string.Delete);
                 alert.setMessage(R.string.Delete_Msg);
-                alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity)getActivity()).getViewModel().delete(group);
-                        ((MainActivity)getActivity()).showGroupList();
-                        dialog.dismiss();
-                    }
-                });
                 alert.setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -96,29 +107,44 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
                         dialog.dismiss();
                     }
                 });
+                alert.setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((MainActivity)getActivity()).getViewModel().delete(group);
+                        ((MainActivity)getActivity()).setWaitingLiveDate(true);
+                        ((MainActivity)getActivity()).setWaitingNext(MainActivity.NEXT_GROUP_LIST);
+                        dialog.dismiss();
+                    }
+                });
+
 
                 alert.create().show();
             }
         });
 
 
-        ImageButton bEdit = (ImageButton) rootView.findViewById(R.id.bEdit);
-        bEdit.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bEdit = (ImageButton) rootView.findViewById(R.id.bEdit);
+        getButtonEdit().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroup(true,isNew);
             }
         });
 
-        ImageButton bCancel = (ImageButton) rootView.findViewById(R.id.bCancel);
-        bCancel.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bCancel = (ImageButton) rootView.findViewById(R.id.bCancel);
+        getButtonCancel().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showGroup(false,isNew);
+                if (isNew) {
+                    ((MainActivity)getActivity()).showGroupList();
+                }else{
+                    ((MainActivity)getActivity()).showGroup(false,isNew);
+                }
+
             }
         });
-        ImageButton bSave = (ImageButton) rootView.findViewById(R.id.bSave);
-        bSave.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bSave = (ImageButton) rootView.findViewById(R.id.bSave);
+        getButtonSave().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int iicon = -1 ;
@@ -141,92 +167,73 @@ public class GroupDetailFragment extends Fragment implements DrawablePickerDialo
                     );
                     ((MainActivity)getActivity()).getViewModel().insert(group);
                 }
-                ((MainActivity)getActivity()).showGroupList();
+                ((MainActivity)getActivity()).setWaitingNext(MainActivity.NEXT_GROUP_LIST);
+                ((MainActivity)getActivity()).setWaitingLiveDate(true);
 
             }
         });
 
-        ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
-        bBackPage.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
+        getButtonBack().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroupList();
             }
         });
-        ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
-        bPrevious.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
+        getButtonPrevious().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroup(false,false,((MainActivity)getActivity()).getGroupPosition()-1);
             }
         });
-        ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
-        bFirst.setOnClickListener(new View.OnClickListener() {
+
+        //ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
+        getButtonFirst().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroup(false,false,0);
             }
         });
-        ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
-        bNext.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
+        getButtonNext().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroup(false,false,((MainActivity)getActivity()).getGroupPosition()+1);
             }
         });
 
-        ImageButton bLast = (ImageButton) rootView.findViewById(R.id.bLast);
-        bLast.setOnClickListener(new View.OnClickListener() {
+        //ImageButton bLast = (ImageButton) rootView.findViewById(R.id.bLast);
+        getButtonLast().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).showGroup(false,false,((MainActivity)getActivity()).getGroupsWithPass().size()-1);
             }
         });
 
-
+        showButton = 0 ;
         if (readWrite) {
-            bCancel.setVisibility(View.VISIBLE);
-            bSave.setVisibility(View.VISIBLE);
-            bEdit.setVisibility(View.INVISIBLE);
-            bDelete.setVisibility(View.INVISIBLE);
-
-            bPrevious.setVisibility(View.INVISIBLE);
-            bFirst.setVisibility(View.INVISIBLE);
-            bNext.setVisibility(View.INVISIBLE);
-            bLast.setVisibility(View.INVISIBLE);
-            bBackPage.setVisibility(View.INVISIBLE);
+            showButton = showButton | SHOW_BUTTON_CANCEL | SHOW_BUTTON_SAVE;
         }else{
-            bCancel.setVisibility(View.INVISIBLE);
-            bSave.setVisibility(View.INVISIBLE);
-            bEdit.setVisibility(View.VISIBLE);
-            bDelete.setVisibility(View.INVISIBLE);
+            showButton = showButton | SHOW_BUTTON_EDIT | SHOW_BUTTON_BACK | SHOW_BUTTON_SEARCH;
             if (((MainActivity)getActivity()).getGroupsWithPass().get(((MainActivity)getActivity()).getGroupPosition()).passList.size() <= 0)
             {
-                bDelete.setVisibility(View.VISIBLE);
+                showButton = showButton | SHOW_BUTTON_DELETE;
+
             }
 
-            bBackPage.setVisibility(View.VISIBLE);
-            if (((MainActivity)getActivity()).getGroupPosition() == 0)
-            {
-                bPrevious.setVisibility(View.INVISIBLE);
-                bFirst.setVisibility(View.INVISIBLE);
-            }else {
-                bPrevious.setVisibility(View.VISIBLE);
-                bFirst.setVisibility(View.VISIBLE);
+            if (((MainActivity)getActivity()).getGroupPosition() > 0) {
+                showButton = showButton | SHOW_BUTTON_PREVIOUS | SHOW_BUTTON_FIRST;
             }
-
-            if (((MainActivity)getActivity()).getGroupPosition() == ((MainActivity)getActivity()).getGroupsWithPass().size()-1)
+            if (((MainActivity)getActivity()).getGroupPosition() < ((MainActivity)getActivity()).getGroupsWithPass().size()-1)
             {
-                bNext.setVisibility(View.INVISIBLE);
-                bLast.setVisibility(View.INVISIBLE);
-            }else {
-                bNext.setVisibility(View.VISIBLE);
-                bLast.setVisibility(View.VISIBLE);
+                showButton = showButton | SHOW_BUTTON_NEXT | SHOW_BUTTON_LAST;
+
             }
         }
 
 
-        return rootView;
+        //return rootView;
     }
 
     public void setisNew(boolean isNe)

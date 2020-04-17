@@ -19,11 +19,25 @@ import ch.rmbi.melspass.room.ViewModel;
 
 
 public class MainActivity extends AppCompatActivity  {
+    public final static int NEXT_DEFAULT = 0;
+    public final static int NEXT_GROUP_LIST = 1;
+    public final static int NEXT_PASS_LIST = 2;
 
-    MenuItem menuSearch;
-    MenuItem menuAddPass;
-    MenuItem menuAddGroup;
 
+    public void setWaitingLiveDate(boolean waitingLiveDate) {
+        isWaitingLiveDate = waitingLiveDate;
+    }
+
+    boolean isWaitingLiveDate = true ;
+    int waitingNext ;
+
+    public int getWaitingNext() {
+        return waitingNext;
+    }
+
+    public void setWaitingNext(int waitingNext) {
+        this.waitingNext = waitingNext;
+    }
 
     private boolean isLargeScreen = false ;
     private ViewModel viewModel;
@@ -63,10 +77,24 @@ public class MainActivity extends AppCompatActivity  {
         viewModel.getGroupsWithPass().observe(this, new Observer<List<GroupWithPass>>() {
             @Override
             public void onChanged(List<GroupWithPass> grpWithPass) {
-                boolean isFirst = groupsWithPass== null ;
+                if (groupsWithPass == null){
+                    isWaitingLiveDate = true;
+                }
+
                 groupsWithPass = grpWithPass;
-                if(isFirst){
-                    show();
+                if(isWaitingLiveDate){
+                    switch (waitingNext) {
+                        case NEXT_GROUP_LIST :
+                            showGroupList();
+                            break;
+                        case NEXT_PASS_LIST :
+                            showPassList();
+                            break;
+                        default:
+                            show();
+                    }
+                    isWaitingLiveDate = false ;
+                    waitingNext = NEXT_DEFAULT;
                 }
 
             }
@@ -110,15 +138,6 @@ public class MainActivity extends AppCompatActivity  {
 
     public void showGroup(boolean readWrite,boolean isNew)
     {
-        menuSearch.setVisible(true);
-        if (readWrite) {
-            menuAddPass.setVisible(false);
-            menuAddGroup.setVisible(false);
-        }else {
-            menuAddPass.setVisible(true);
-            menuAddGroup.setVisible(true);
-        }
-
 
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
@@ -151,14 +170,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void showPass(boolean readWrite,boolean isNew)
     {
-        menuSearch.setVisible(true);
-        if (readWrite) {
-            menuAddPass.setVisible(false);
-            menuAddGroup.setVisible(false);
-        }else {
-            menuAddPass.setVisible(true);
-            menuAddGroup.setVisible(true);
-        }
+
 
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
@@ -192,9 +204,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void showPassList()
     {
-        menuSearch.setVisible(true);
-        menuAddPass.setVisible(true);
-        menuAddGroup.setVisible(true);
+
 
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
@@ -204,10 +214,7 @@ public class MainActivity extends AppCompatActivity  {
 
         if(isLargeScreen)
         {
-            if (fragMain.getClass() != GroupListFragment.class)
-            {
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, new GroupListFragment()).commit();
-            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, new GroupListFragment()).commit();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passListFragment).commit();
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, passListFragment).commit();
@@ -215,36 +222,17 @@ public class MainActivity extends AppCompatActivity  {
 
 
     }
+
+    public void showSearch()
+    {
+        ;
+    }
+
     public void showPassList(int grpPos)
     {
         groupPosition = grpPos ;
         showPassList();
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        menuSearch = menu.findItem (R.id.app_bar_search);
-        menuAddPass = menu.findItem (R.id.action_add_pass);
-        menuAddGroup = menu.findItem (R.id.action_add_group);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch(item.getItemId()){
-            case R.id.action_add_group:
-                showGroup(true,true);
-                return true;
-            case R.id.action_add_pass:
-                showPass(true,true);
-                return true;
-            case R.id.app_bar_search:
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }
