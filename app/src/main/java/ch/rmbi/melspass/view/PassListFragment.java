@@ -45,13 +45,22 @@ public class PassListFragment extends TemplateFragment {
 
     @Override
     protected String getFragmentTitle() {
-        return "List des Pasword du group xx";
+        return title;
     }
+    String title = "";
 
 
     @Override
     protected int getFragmentButtonVisible() {
+        if (((MainActivity)getActivity()).getIsLargeScreen() && getIsMainLayout() ){
+            return SHOW_BUTTON_NONE ;
+        }
         return SHOW_BUTTON_ADD | SHOW_BUTTON_SEARCH | SHOW_BUTTON_BACK ;
+    }
+
+    @Override
+    protected void onBackPressed() {
+        ((MainActivity) getActivity()).showGroupList();
     }
 
     @Override
@@ -71,6 +80,9 @@ public class PassListFragment extends TemplateFragment {
 
         passListAdapter.setPass(groupWithPass.passList);
 
+        title = getResources().getString(R.string.list_pass_fragment_title);
+        title = title + " " +groupWithPass.group.getName();
+
 
 
         //ImageButton bAdd = (ImageButton) rootView.findViewById(R.id.bAdd);
@@ -81,13 +93,6 @@ public class PassListFragment extends TemplateFragment {
             }
         });
 
-        //ImageButton bSearch = (ImageButton) rootView.findViewById(R.id.bSearch);
-        getButtonSearch().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).showSearch();
-            }
-        });
 
         //ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);
         getButtonBack().setOnClickListener(new View.OnClickListener() {

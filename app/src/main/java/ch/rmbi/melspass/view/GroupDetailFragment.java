@@ -45,7 +45,7 @@ public class GroupDetailFragment extends TemplateFragment implements DrawablePic
 
     @Override
     protected String getFragmentTitle() {
-        return "Edition";
+        return getResources().getString(R.string.detail_group_fragment_title);
     }
 
 
@@ -53,6 +53,12 @@ public class GroupDetailFragment extends TemplateFragment implements DrawablePic
     protected int getFragmentButtonVisible() {
         return showButton;
     }
+
+    @Override
+    protected void onBackPressed() {
+        ((MainActivity) getActivity()).showGroupList();
+    }
+
     int showButton = 0;
     public void onCreateAppView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         //View rootView = inflater.inflate(R.layout.fragment_group_detail,container,false);
@@ -163,7 +169,8 @@ public class GroupDetailFragment extends TemplateFragment implements DrawablePic
                     group = new Group(
                             etName.getText().toString(),
                             etDescription.getText().toString(),
-                            iicon
+                            iicon,
+                            ((MainActivity)getActivity()).getViewModel().getGroupMaxOrder()+1
                     );
                     ((MainActivity)getActivity()).getViewModel().insert(group);
                 }

@@ -21,6 +21,13 @@ public class ViewModel extends AndroidViewModel {
         repository = new Repository(application);
     }
 
+    public int getGroupMaxOrder(){
+        return repository.getGroupMaxOrder();
+    }
+
+    public int getPassMaxOrder(){
+        return repository.getPassMaxOrder();
+    }
 
     public List<Group> getGroups() {
         return repository.getGroups();
@@ -30,6 +37,11 @@ public class ViewModel extends AndroidViewModel {
 
     public LiveData<List<GroupWithPass>> getGroupsWithPass() {
         return repository.getGroupsWithPass();
+    }
+
+
+    public LiveData<List<Pass>> getSearchPass(String search) {
+        return repository.getSearchPass(search);
     }
 
 

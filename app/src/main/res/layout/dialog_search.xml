@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="20dp">
+
+
+    <EditText
+        android:id="@+id/etString"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/search_dialog_search_string"
+        android:text=""
+        android:autofillHints="" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/etString"
+        >
+
+        <ImageButton
+            android:id="@+id/bSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:background="@null"
+            app:srcCompat="@drawable/ic_youtube_searched_for_black_48dp"
+            android:layout_toStartOf="@id/sCenter"
+            android:contentDescription="@string/menu.Search" />
+
+
+        <Space
+            android:id="@+id/sCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:minWidth="2dp"
+
+            />
+
+        <ImageButton
+            android:id="@+id/bCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/sCenter"
+            android:paddingTop="20dp"
+            android:background="@null"
+            app:srcCompat="@drawable/ic_close_black_48dp"
+            android:contentDescription="@string/bCancel" />
+    </RelativeLayout>
+</RelativeLayout>

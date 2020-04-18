@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Group.class,Pass.class}, version = 3, exportSchema = false)
+@Database(entities = {Group.class,Pass.class}, version = 4, exportSchema = false)
 abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
 
     abstract PassDao passDao();
@@ -33,6 +33,7 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
                             .addCallback(sRoomDatabaseCallback)
                             .addMigrations(MIGRATION_1_2)
                             .addMigrations(MIGRATION_2_3)
+                            .addMigrations(MIGRATION_3_4)
                             .allowMainThreadQueries()
                             .build();
                 }
@@ -52,9 +53,10 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
                 // Populate the database in the background.
                 // If you want to start with more words, just add them.
                 //GroupDao dao = instance.groupDao();
-/*
-                instance.groupDao().deleteAll();
 
+
+//                instance.groupDao().deleteAll();
+/*
                 long key;
 
                 Group grp = new Group("GRP1","C'est le groupe 1");
@@ -99,6 +101,16 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
             database.execSQL("ALTER TABLE Group_tbl ADD COLUMN imageIndex INTEGER NOT NULL DEFAULT -1");
         }
     };
+
+
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Group_tbl ADD COLUMN orderNumber INTEGER NOT NULL DEFAULT -1");
+            database.execSQL("ALTER TABLE Pass_tbl ADD COLUMN orderNumber INTEGER NOT NULL DEFAULT -1");
+        }
+    };
+
 
 
 }

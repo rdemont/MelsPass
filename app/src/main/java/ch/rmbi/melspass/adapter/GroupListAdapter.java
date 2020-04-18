@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ch.rmbi.melspass.R;
+import ch.rmbi.melspass.room.Group;
 import ch.rmbi.melspass.room.GroupWithPass;
 import ch.rmbi.melspass.utils.Icon;
 import ch.rmbi.melspass.utils.IconList;
@@ -40,6 +41,8 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         private final ImageButton bEdit;
         private final RelativeLayout rlGroupListItem;
         private final ImageView ivIcon;
+        private final ImageButton bOrderUp;
+        private final ImageButton bOrderDown;
 
         private GroupViewHolder(View itemView) {
             super(itemView);
@@ -49,6 +52,8 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             bEdit = itemView.findViewById(R.id.bEdit);
             rlGroupListItem = itemView.findViewById(R.id.rlGroupListItem);
             ivIcon = itemView.findViewById(R.id.ivIcon);
+            bOrderUp = itemView.findViewById(R.id.bOrderUp);
+            bOrderDown = itemView.findViewById(R.id.bOrderDown);
 
 
         }
@@ -77,9 +82,17 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         holder.tvGroupName.setText(current.group.getName());
         holder.tvDescription.setText(current.group.getDescription());
         holder.tvPassCount.setText(String.valueOf(current.passList.size()));
+        //holder.tvPassCount.setText(String.valueOf(current.group.getOrderNumber()));
         Icon icon = IconList.getInstance(parentActivity.getBaseContext()).getIcon(current.group.getImageIndex());
         holder.ivIcon.setImageDrawable(icon.getDrawable());
         holder.ivIcon.setContentDescription(icon.getDescription());
+        if (position <= 0){
+            holder.bOrderUp.setVisibility(View.INVISIBLE);
+        }
+        if (position >= ((MainActivity)parentActivity).getGroupsWithPass().size()-1){
+            holder.bOrderDown.setVisibility(View.INVISIBLE);
+        }
+
 
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +101,53 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
                 ((MainActivity)parentActivity).showGroup(false,false,position);
             }
         });
+
+        holder.bOrderDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Group gCurrent = ((MainActivity)parentActivity).getGroupsWithPass().get(position).group;
+                Group gNext = ((MainActivity)parentActivity).getGroupsWithPass().get(position+1).group;
+                int oCurrent = gCurrent.getOrderNumber();
+                int oNext = gNext.getOrderNumber();
+                ((MainActivity)parentActivity).setWaitingLiveDate(true);
+                ((MainActivity)parentActivity).setWaitingNext(MainActivity.NEXT_GROUP_LIST);
+                if (oCurrent == oNext)
+                {
+                    gCurrent.setOrderNumber(++oNext);
+                    ((MainActivity)parentActivity).getViewModel().update(gCurrent);
+                }else {
+                    gCurrent.setOrderNumber(oNext);
+                    gNext.setOrderNumber(oCurrent);
+                    ((MainActivity)parentActivity).getViewModel().update(gCurrent,gNext);
+                }
+                ((MainActivity)parentActivity).showGroupList();
+
+            }
+        });
+
+        holder.bOrderUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Group gCurrent = ((MainActivity)parentActivity).getGroupsWithPass().get(position).group;
+                Group gPrevious = ((MainActivity)parentActivity).getGroupsWithPass().get(position-1).group;
+                int oCurrent = gCurrent.getOrderNumber();
+                int oPrevious = gPrevious.getOrderNumber();
+                ((MainActivity)parentActivity).setWaitingLiveDate(true);
+                ((MainActivity)parentActivity).setWaitingNext(MainActivity.NEXT_GROUP_LIST);
+                if (oCurrent == oPrevious)
+                {
+                    gCurrent.setOrderNumber(--oPrevious);
+                    ((MainActivity)parentActivity).getViewModel().update(gCurrent);
+                }else {
+                    gCurrent.setOrderNumber(oPrevious);
+                    gPrevious.setOrderNumber(oCurrent);
+                    ((MainActivity)parentActivity).getViewModel().update(gCurrent,gPrevious);
+                }
+                ((MainActivity)parentActivity).showGroupList();
+
+            }
+        });
+
 
         if(((MainActivity)parentActivity).getGroupPosition()==position){
             holder.rlGroupListItem.setSelected(true);

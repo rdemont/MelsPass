@@ -46,6 +46,17 @@
     <string name="close">Fermer</string>
     <string name="ic_adb_black_24dp">Android logo</string>
     <string name="groupList_title">Liste des groupes</string>
+    <string name="list_group_fragment_title">Liste des groupes</string>
+    <string name="detail_group_fragment_title">Détail du groupe</string>
+    <string name="detail_pass_fragment_title">Détail du login</string>
+    <string name="list_pass_fragment_title">Logins du groupe </string>
+    <string name="tvGroup_label">Groupe</string>
+    <string name="bGeneratePassword">Génération d\'un password</string>
+    <string name="bOpenUrl.hint">Ouvrir l\'URL</string>
+    <string name="dialog_search_title">Recherche</string>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_search_result_fragment_title">Résultat de la recherche</string>
+    <string name="search_dialog_search_string">Chaîne de recherche</string>
 
 </resources>

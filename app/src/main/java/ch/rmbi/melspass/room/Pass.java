@@ -18,13 +18,14 @@ import androidx.room.PrimaryKey;
 public class Pass {
 
 
-    public Pass(Long group_id,String name,String username, String userPass, String url, String description) {
+    public Pass(Long group_id,String name,String username, String userPass, String url, String description,int orderNumber) {
         this.group_id = group_id;
         this.username = username;
         this.userPass = userPass;
         this.url = url;
         this.description = description;
         this.name = name ;
+        this.orderNumber = orderNumber;
     }
 
     @NonNull
@@ -40,6 +41,18 @@ public class Pass {
     private String url ;
     private String description ;
     private String name;
+
+
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    private int orderNumber;
 
     public String getName() {
         return name;

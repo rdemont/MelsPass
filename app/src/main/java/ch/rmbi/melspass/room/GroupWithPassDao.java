@@ -15,6 +15,6 @@ public interface GroupWithPassDao {
     public List<GroupWithPass> getGroupsWithPass();
 
 
-    @Query("SELECT * from group_tbl")
+    @Query("SELECT * from group_tbl ORDER BY group_tbl.orderNumber ASC")
     public LiveData<List<GroupWithPass>> getLiveGroupsWithPass();
 }

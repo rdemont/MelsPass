@@ -29,7 +29,7 @@ public class GroupListFragment extends TemplateFragment {
 
     @Override
     protected String getFragmentTitle() {
-        return "Liste des groupes";
+        return getResources().getString(R.string.list_group_fragment_title);
     }
 
     @Nullable
@@ -62,13 +62,6 @@ public class GroupListFragment extends TemplateFragment {
             }
         });
 
-        //ImageButton bSearch = rootView.findViewById(R.id.bSearch);
-        getButtonSearch().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).showSearch();
-            }
-        });
 
 
 
@@ -77,7 +70,17 @@ public class GroupListFragment extends TemplateFragment {
 
     @Override
     protected int getFragmentButtonVisible() {
+        if (((MainActivity)getActivity()).getIsLargeScreen()){
+            return SHOW_BUTTON_ADD;
+        }
         return SHOW_BUTTON_ADD | SHOW_BUTTON_SEARCH;
+    }
+
+    @Override
+    protected void onBackPressed() {
+        ((MainActivity)getActivity()).finish();
+        System.exit(0);
+
     }
 
 

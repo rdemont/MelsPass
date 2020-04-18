@@ -8,6 +8,7 @@ import android.view.ViewStub;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ch.rmbi.melspass.R;
 import ch.rmbi.melspass.utils.ItemClickSupport;
+import ch.rmbi.melspass.view.DialogFragment.DrawablePickerDialogFragment;
+import ch.rmbi.melspass.view.DialogFragment.SearchDialogFragment;
 
 public abstract class TemplateFragment extends Fragment {
-
+    protected int SHOW_BUTTON_NONE = 0;
     protected int SHOW_BUTTON_FIRST = 1;
     protected int SHOW_BUTTON_PREVIOUS = 2;
     protected int SHOW_BUTTON_SAVE = 4;
@@ -35,8 +38,10 @@ public abstract class TemplateFragment extends Fragment {
     abstract protected String getFragmentTitle();
     abstract protected void onCreateAppView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) ;
     abstract protected int getFragmentButtonVisible();
+    abstract protected void onBackPressed();
 
     private View rootView;
+    TemplateFragment me = this;
 
     private ImageButton bAppFirst;
     private ImageButton bAppPrevious;
@@ -74,9 +79,9 @@ public abstract class TemplateFragment extends Fragment {
         return bAppBack;
     }
 
-    protected ImageButton getButtonSearch() {
+    /*protected ImageButton getButtonSearch() {
         return bAppSearch;
-    }
+    }*/
 
     protected ImageButton getButtonCancel() {
         return bAppCancel;
@@ -95,6 +100,15 @@ public abstract class TemplateFragment extends Fragment {
     }
 
 
+    private boolean isMainLayout = false ;
+    protected boolean getIsMainLayout() {
+        return isMainLayout ;
+    }
+    protected boolean getIsDetailLayout() {
+        return ! isMainLayout;
+    }
+
+
 
     @Nullable
     @Override
@@ -102,11 +116,19 @@ public abstract class TemplateFragment extends Fragment {
 
         View appView = inflater.inflate(R.layout.fragment_template, container, false);
 
+        isMainLayout = container.getId() == R.id.frame_layout_main;
+
         ViewStub stub = appView.findViewById(R.id.vsApp);
         stub.setLayoutResource(getFragmentLayout());
         rootView = stub.inflate();
 
-
+        OnBackPressedCallback callback = new OnBackPressedCallback(true ) {
+            @Override
+            public void handleOnBackPressed() {
+                onBackPressed();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         TextView tvTitle =  appView.findViewById(R.id.tvAppTitle);
 
@@ -134,6 +156,17 @@ public abstract class TemplateFragment extends Fragment {
         bAppDelete.setVisibility(View.INVISIBLE);
         bAppNext.setVisibility(View.INVISIBLE);
         bAppLast.setVisibility(View.INVISIBLE);
+
+
+        bAppSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchDialogFragment dialog = new SearchDialogFragment();
+
+                //dialog.setListener(me);
+                dialog.show(getParentFragmentManager(), "NoticeDialogFragment");
+            }
+        });
 
         onCreateAppView(inflater,container,savedInstanceState);
 

@@ -32,6 +32,21 @@ public class Repository {
         return db.groupDao().findPassForGroup(group.getId());
     }
 
+    public LiveData<List<Pass>> getSearchPass(String search){
+        String str = "%"+search+"%";
+        return db.passDao().getSearchPass(str);
+    }
+
+
+    public int getGroupMaxOrder(){
+        return  db.groupDao().getGroupMaxOrder();
+    }
+
+    public int getPassMaxOrder(){
+        return db.passDao().getPassMaxOrder();
+    }
+
+
 
     public void insert(Group group) {
         LocalRoomDatabase.databaseWriteExecutor.execute(() -> {

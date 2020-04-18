@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,12 @@ import ch.rmbi.melspass.view.MainActivity;
 public class PassListAdapter extends RecyclerView.Adapter<PassListAdapter.PassViewHolder>{
 
     Activity parentActivity;
-
+/*
+    boolean isSearchResult = false ;
+    public void setIssearchResult(boolean isSearch ){
+        isSearchResult = isSearch ;
+    }
+*/
     public void setParentActivity(Activity parentActivity) {
         this.parentActivity = parentActivity;
     }
@@ -29,7 +35,7 @@ public class PassListAdapter extends RecyclerView.Adapter<PassListAdapter.PassVi
     class PassViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvUsername;
         private final TextView tvName;
-        private final LinearLayout rlPassListItem;
+        private final RelativeLayout rlPassListItem;
 
         private PassViewHolder(View itemView) {
             super(itemView);
@@ -68,7 +74,7 @@ public class PassListAdapter extends RecyclerView.Adapter<PassListAdapter.PassVi
         }
 
 
-        if(((MainActivity)parentActivity).getGroupPosition()==position){
+        if(((MainActivity)parentActivity).getPassPosition()==position){
             holder.rlPassListItem.setSelected(true);
         }
         else

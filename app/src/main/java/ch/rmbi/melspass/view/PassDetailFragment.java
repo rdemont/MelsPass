@@ -55,7 +55,7 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
 
     @Override
     protected String getFragmentTitle() {
-        return "Détail du password ";
+        return getResources().getString(R.string.detail_pass_fragment_title);
     }
 
 
@@ -64,6 +64,22 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
     protected int getFragmentButtonVisible() {
         return showButton;
     }
+
+    @Override
+    protected void onBackPressed() {
+        if (((MainActivity) getActivity()).getSearchPassList() != null)
+        {
+            if(((MainActivity) getActivity()).getIsLargeScreen()) {
+                ((MainActivity) getActivity()).showGroupList();
+            }else {
+                ((MainActivity) getActivity()).showSearchResultList();
+            }
+        }else {
+            ((MainActivity) getActivity()).showPassList();
+        }
+
+    }
+
     int showButton = 0 ;
 
     @Nullable
@@ -71,8 +87,13 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
     public void onCreateAppView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //View rootView = inflater.inflate(R.layout.fragment_pass_detail,container,false);
 
-        if (!isNew) {
-            pass = ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.get(((MainActivity) getActivity()).getPassPosition());
+        if (!isNew)  {
+            if (((MainActivity) getActivity()).getSearchPassList() != null)
+            {
+                pass = ((MainActivity) getActivity()).getSearchPassList().get(((MainActivity) getActivity()).getPassPosition());
+            }else {
+                pass = ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.get(((MainActivity) getActivity()).getPassPosition());
+            }
         }
         View rootView = getRootView();
 
@@ -203,7 +224,8 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
                             etUserName.getText().toString(),
                             etUserPass.getText().toString(),
                             etUrl.getText().toString(),
-                            etDescription.getText().toString()
+                            etDescription.getText().toString(),
+                            ((MainActivity)getActivity()).getViewModel().getPassMaxOrder()+1
                     );
                     ((MainActivity)getActivity()).getViewModel().insert(pass);
                 }
@@ -285,28 +307,43 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
         getButtonBack().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPassList();
+                onBackPressed();
             }
         });
         ///ImageButton bPrevious = (ImageButton) rootView.findViewById(R.id.bPrevious);
         getButtonPrevious().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getPassPosition()-1);
+                if (((MainActivity) getActivity()).getSearchPassList() != null){
+                    ((MainActivity) getActivity()).showSearchPass(((MainActivity) getActivity()).getPassPosition() - 1);
+                } else {
+                    ((MainActivity) getActivity()).showPass(readWrite, false, ((MainActivity) getActivity()).getPassPosition() - 1);
+                }
+
             }
         });
+
         //ImageButton bFirst = (ImageButton) rootView.findViewById(R.id.bFirst);
         getButtonFirst().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPass(readWrite,false,0);
+                if (((MainActivity) getActivity()).getSearchPassList() != null) {
+                    ((MainActivity) getActivity()).showSearchPass(0);
+                } else {
+                    ((MainActivity) getActivity()).showPass(readWrite, false, 0);
+                }
             }
         });
         //ImageButton bNext = (ImageButton) rootView.findViewById(R.id.bNext);
         getButtonNext().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getPassPosition()+1);
+                if (((MainActivity) getActivity()).getSearchPassList() != null) {
+                    ((MainActivity) getActivity()).showSearchPass(((MainActivity) getActivity()).getPassPosition() + 1);
+                } else {
+
+                    ((MainActivity) getActivity()).showPass(readWrite, false, ((MainActivity) getActivity()).getPassPosition() + 1);
+                }
             }
         });
 
@@ -314,28 +351,41 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
         getButtonLast().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showPass(readWrite,false,((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1);
+                if (((MainActivity) getActivity()).getSearchPassList() != null) {
+                    ((MainActivity) getActivity()).showSearchPass(((MainActivity) getActivity()).getSearchPassList().size()-1);
+                } else {
+                    ((MainActivity) getActivity()).showPass(readWrite, false,  ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1 );
+                }
+            }
+        });
+        getButtonAdd().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).showPass(true,true);
             }
         });
 
+        int last = ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1 ;
+        if (((MainActivity) getActivity()).getSearchPassList() != null){
+            last = ((MainActivity) getActivity()).getSearchPassList().size()-1 ;
+        }
 
         if (readWrite) {
             showButton = showButton | SHOW_BUTTON_CANCEL | SHOW_BUTTON_SAVE;
         }else{
-            showButton = showButton | SHOW_BUTTON_DELETE | SHOW_BUTTON_EDIT | SHOW_BUTTON_BACK;
+            showButton = showButton | SHOW_BUTTON_DELETE | SHOW_BUTTON_EDIT | SHOW_BUTTON_BACK | SHOW_BUTTON_SEARCH;
             if (((MainActivity) getActivity()).getPassPosition() > 0)
             {
                 showButton = showButton | SHOW_BUTTON_PREVIOUS | SHOW_BUTTON_FIRST;
             }
-
-            if (((MainActivity) getActivity()).getPassPosition() < ((MainActivity) getActivity()).getGroupsWithPass().get(((MainActivity) getActivity()).getGroupPosition()).passList.size()-1)
+            if (((MainActivity) getActivity()).getPassPosition() < last)
             {
                 showButton = showButton | SHOW_BUTTON_NEXT | SHOW_BUTTON_LAST;
             }
+            if (((MainActivity) getActivity()).getIsLargeScreen()){
+                showButton = showButton | SHOW_BUTTON_ADD;
+            }
         }
-
-        ///return rootView;
-
     }
 
     public void setReadWrite(boolean rWrite)

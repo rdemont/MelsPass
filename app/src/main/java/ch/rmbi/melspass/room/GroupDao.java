@@ -16,6 +16,9 @@ public interface GroupDao {
     @Query("SELECT * from Group_tbl ORDER BY name ASC")
     List<Group> getGroups();
 
+    @Query("SELECT MAX(orderNumber) from Group_tbl")
+    int getGroupMaxOrder();
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(Group group);
 

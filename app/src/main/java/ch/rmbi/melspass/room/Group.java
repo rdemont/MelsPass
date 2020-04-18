@@ -13,10 +13,11 @@ import java.util.List;
 @Entity(tableName = "Group_tbl")
 public class Group {
 
-    public Group(String name, String description,int imageIndex) {
+    public Group(String name, String description,int imageIndex,int orderNumber) {
         this.name = name;
         this.description = description;
         this.imageIndex = imageIndex;
+        this.orderNumber = orderNumber;
     }
 
     @NonNull
@@ -30,6 +31,15 @@ public class Group {
 
     private int imageIndex ;
 
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    private int orderNumber ;
 
 
     public int getImageIndex() {

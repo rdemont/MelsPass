@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import ch.rmbi.melspass.R;
 import ch.rmbi.melspass.room.GroupWithPass;
+import ch.rmbi.melspass.room.Pass;
 import ch.rmbi.melspass.room.ViewModel;
 
 
@@ -48,8 +51,12 @@ public class MainActivity extends AppCompatActivity  {
     public List<GroupWithPass> getGroupsWithPass() {
         return groupsWithPass;
     }
-
+    public List<Pass> getSearchPassList() {
+        return searchPassList;
+    }
     private List<GroupWithPass> groupsWithPass;
+    private List<Pass> searchPassList ;
+
 
     public ViewModel getViewModel() {
         return viewModel;
@@ -82,19 +89,22 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
                 groupsWithPass = grpWithPass;
+
                 if(isWaitingLiveDate){
-                    switch (waitingNext) {
-                        case NEXT_GROUP_LIST :
-                            showGroupList();
-                            break;
-                        case NEXT_PASS_LIST :
-                            showPassList();
-                            break;
-                        default:
-                            show();
+                    if (searchPassList == null) {
+                        switch (waitingNext) {
+                            case NEXT_GROUP_LIST:
+                                showGroupList();
+                                break;
+                            case NEXT_PASS_LIST:
+                                showPassList();
+                                break;
+                            default:
+                                showGroupList();
+                        }
+                        isWaitingLiveDate = false;
+                        waitingNext = NEXT_DEFAULT;
                     }
-                    isWaitingLiveDate = false ;
-                    waitingNext = NEXT_DEFAULT;
                 }
 
             }
@@ -114,15 +124,89 @@ public class MainActivity extends AppCompatActivity  {
         return isLargeScreen ;
     }
 
-    public void show()
-    {
-        GroupListFragment groupListFragment = new GroupListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
+    public void cancelSearch(){
+        searchPassList = null ;
+        //groupPosition = 0;
+        passPosition = 0;
+    }
+    /*
+        public void show()
+        {
 
-        if (isLargeScreen) {
-            WelcomeFragment welcomeFragment = new WelcomeFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
+            showGroupList();
+
+            cancelSearch();
+            GroupListFragment groupListFragment = new GroupListFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
+
+            if (isLargeScreen) {
+                WelcomeFragment welcomeFragment = new WelcomeFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
+            }
+
+
         }
+     */
+    public void showSearch(String search)
+    {
+        Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
+        Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
+
+        viewModel.getSearchPass(search).observe(this, new Observer<List<Pass>>() {
+            @Override
+            public void onChanged(List<Pass> pass) {
+                searchPassList = pass;
+                showSearchResultList();
+            }
+        });
+    }
+
+    public void showSearchPass(int position)
+    {
+        passPosition = position;
+
+        Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
+        Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
+        SearchResultFragment resultFrag = new SearchResultFragment();
+        if(isLargeScreen)
+        {
+            PassDetailFragment passDetailFragment = new PassDetailFragment();
+            passDetailFragment.setisNew(false);
+            passDetailFragment.setReadWrite(false);
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,  resultFrag).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passDetailFragment).commit();
+
+        }else{
+            showPass(false,false,position);
+        }
+
+    }
+
+    public void showSearchResultList(){
+
+
+        Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
+        Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
+        SearchResultFragment resultFrag = new SearchResultFragment();
+
+        if(isLargeScreen)
+        {
+            PassDetailFragment passDetailFragment = new PassDetailFragment();
+            passDetailFragment.setisNew(false);
+            passDetailFragment.setReadWrite(false);
+            passPosition = 0 ;
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,  resultFrag).commit();
+            if ((searchPassList != null) && (searchPassList.size() > 0)) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passDetailFragment).commit();
+            }
+
+        }else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, resultFrag).commit();
+        }
+
+
+
     }
 
     public void showGroup(boolean readWrite)
@@ -138,7 +222,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void showGroup(boolean readWrite,boolean isNew)
     {
-
+        cancelSearch();
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
 
@@ -148,7 +232,6 @@ public class MainActivity extends AppCompatActivity  {
 
         if(isLargeScreen)
         {
-
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,  new GroupListFragment()).commit();
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, groupDetailFragment).commit();
 
@@ -161,6 +244,7 @@ public class MainActivity extends AppCompatActivity  {
     {
         showPass(readWrite,false);
     }
+
 
     public void showPass(boolean readWrite,boolean isNew,int pos)
     {
@@ -180,8 +264,11 @@ public class MainActivity extends AppCompatActivity  {
         passDetailFragment.setReadWrite(readWrite);
         if(isLargeScreen)
         {
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,  new PassListFragment()).commit();
+            if (searchPassList != null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, new SearchResultFragment()).commit();
+            }else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, new PassListFragment()).commit();
+            }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passDetailFragment).commit();
 
         }else{
@@ -193,19 +280,21 @@ public class MainActivity extends AppCompatActivity  {
 
     public void showGroupList()
     {
-        GroupListFragment groupListFragment = new GroupListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
+        cancelSearch();
+
 
         if (isLargeScreen) {
-            WelcomeFragment welcomeFragment = new WelcomeFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
+            showPassList();
+        }else {
+            GroupListFragment groupListFragment = new GroupListFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
         }
     }
 
     public void showPassList()
     {
 
-
+        cancelSearch();
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
         Fragment fragDetail = getSupportFragmentManager().findFragmentById(R.id.frame_layout_detail);
 
@@ -214,8 +303,21 @@ public class MainActivity extends AppCompatActivity  {
 
         if(isLargeScreen)
         {
+            if (groupsWithPass.size() == 0 ){
+                WelcomeFragment welcomeFragment = new WelcomeFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
+            }else {
+                if (groupsWithPass.size() < groupPosition) {
+                    groupPosition = 0;
+                }
+            }
+            if (groupsWithPass.get(groupPosition).passList.size() <= 0 ){
+                WelcomeFragment welcomeFragment = new WelcomeFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
+            }else {
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passListFragment).commit();
+            }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, new GroupListFragment()).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, passListFragment).commit();
         }else{
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, passListFragment).commit();
         }
@@ -223,10 +325,6 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    public void showSearch()
-    {
-        ;
-    }
 
     public void showPassList(int grpPos)
     {
