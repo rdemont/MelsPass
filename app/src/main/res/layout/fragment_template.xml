@@ -18,11 +18,19 @@
 
         />
 
+    <TableRow
+        android:id="@+id/LineTop"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#444"
+        android:layout_below="@id/tvAppTitle"
+        />
+
     <ViewStub android:id="@+id/vsApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvAppTitle"
-        android:layout_above="@id/llBottom"
+        android:layout_below="@id/LineTop"
+        android:layout_above="@id/LineBottom"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:paddingBottom="0dp"
@@ -31,6 +39,14 @@
 
         />
 
+
+    <TableRow
+        android:id="@+id/LineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#444"
+        android:layout_above="@id/llBottom"
+        />
 
     <LinearLayout
         android:id="@+id/llBottom"

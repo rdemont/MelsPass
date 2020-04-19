@@ -58,5 +58,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="list_search_result_fragment_title">Résultat de la recherche</string>
     <string name="search_dialog_search_string">Chaîne de recherche</string>
+    <string name="biometric_no_hardware">Pas de lecteur biometrique</string>
+    <string name="biometric_hardware_unavailable">Lecteur biometric pas disponible</string>
+    <string name="biometric_not_setup">"Lecteur biometric pas initialisé "</string>
+    <string name="biometric_title">Lecteur biometric</string>
+    <string name="biometric_subtitle"></string>
+    <string name="biometric_description">Placez votre doigt sur le lecteur d\’empreinte</string>
+    <string name="biometric_auth_error">Erreur d\'identification</string>
+    <string name="copy_password">Password copié dans le presse-papier</string>
+    <string name="copy_username">Nom d\'utilisateur copié dans le presse papier</string>
 
 </resources>

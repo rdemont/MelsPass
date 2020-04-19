@@ -299,8 +299,15 @@ public class PassDetailFragment extends TemplateFragment implements PasswordGene
         bOpenUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(etUrl.getText().toString()));
-                startActivity(browserIntent);
+                String url = etUrl.getText().toString();
+                if (url != null) {
+                    if (!url.startsWith("http"))
+                    {
+                        url = "http://"+url;
+                    }
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
             }
         });
         //ImageButton bBackPage = (ImageButton) rootView.findViewById(R.id.bBackPage);

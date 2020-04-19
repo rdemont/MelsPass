@@ -2,31 +2,165 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rlPassListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/backgroud_list_selector"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
     >
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:width="100dip"
-        android:text="blabla "
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"        />
-
-    <TextView
-        android:id="@+id/tvUserName"
+    <RelativeLayout
+        android:id="@+id/rlPassListItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="blabla"
-        android:layout_toEndOf="@id/tvName"
+        android:background="@drawable/backgroud_list_selector"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/rlName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            >
+
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="blabla "
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@id/bEdit"
+                />
+            <ImageButton
+                android:id="@+id/bEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@null"
+                android:contentDescription="@string/bEdit.hint"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rlUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlName"
+
+            >
+
+            <ImageButton
+                android:id="@+id/bCopyUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@null"
+                android:contentDescription="@string/bCopy.hint"
+                android:src="@drawable/ic_content_copy_black_24dp"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@id/tvUserName"
+                app:layout_constraintEnd_toStartOf="@id/tvUserName"
+                app:layout_constraintStart_toStartOf="parent"
+
+                tools:ignore="MissingConstraints" />
+            />
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                tools:ignore="MissingConstraints"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintStart_toEndOf="@id/bCopyUserName"
+                />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".6" />
+
+
+
+            <ImageButton
+                android:id="@+id/bCopyUserPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@null"
+                android:contentDescription="@string/bCopy.hint"
+
+                android:src="@drawable/ic_content_copy_black_24dp"
+                tools:ignore="MissingConstraints"
+
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                />
+
+            <TextView
+                android:id="@+id/tvPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bCopyUserPass"
+                android:layout_alignParentRight="true"
+                android:text=""
+                tools:ignore="MissingConstraints"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlUsername"
+            android:id="@+id/rlUrl"
+            >
+            <TextView
+                android:id="@+id/tvUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="www.google.ch"
+                android:layout_toLeftOf="@id/bOpenUrl"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+
+                />
+            <ImageButton
+                android:id="@+id/bOpenUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@string/bOpenUrl.hint"
+                android:maxWidth="24dip"
+                android:maxHeight="24dip"
+                android:minWidth="24dip"
+                android:minHeight="24dip"
+                android:src="@drawable/ic_open_in_browser_black_24dp"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TableRow
+        android:id="@+id/LineBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#444"
+        android:layout_below="@id/rlPassListItem"
         />
 
 </RelativeLayout>

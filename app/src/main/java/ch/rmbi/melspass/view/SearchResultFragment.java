@@ -36,6 +36,7 @@ public class SearchResultFragment extends TemplateFragment {
 
     private RecyclerView rvPassList;
 
+    private PassListAdapter passListAdapter;
 
     @Override
     protected void onCreateAppView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class SearchResultFragment extends TemplateFragment {
 
 
         rvPassList = (RecyclerView) rootView.findViewById(R.id.rvPassList);
-        final PassListAdapter passListAdapter = new PassListAdapter(rvPassList.getContext());
+        passListAdapter = new PassListAdapter(rvPassList.getContext());
         passListAdapter.setParentActivity(getActivity());
 
         if ((passList == null) || (passList.size() <= 0)){
@@ -100,7 +101,12 @@ public class SearchResultFragment extends TemplateFragment {
     }
     @Override
     protected int getFragmentButtonVisible() {
-       return SHOW_BUTTON_SEARCH | SHOW_BUTTON_BACK ;
+        if (((MainActivity) getActivity()).getIsLargeScreen())
+        {
+            return SHOW_BUTTON_NONE ;
+        }else {
+            return SHOW_BUTTON_SEARCH | SHOW_BUTTON_BACK;
+        }
     }
 
     @Override
@@ -109,13 +115,28 @@ public class SearchResultFragment extends TemplateFragment {
 
     }
 
+
+    View vSelected ;
     private void configureOnClickRecyclerView(){
      ItemClickSupport.addTo(rvPassList, R.layout.pass_list_layout)
              .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
               @Override
               public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                  if (((MainActivity)getActivity()).getIsLargeScreen() && getIsMainLayout() ){
+                      ((MainActivity)getActivity()).showSearchPass(position);
+                  }else {
+                      if ((vSelected == null) && (passListAdapter != null)) {
+                          passListAdapter.getViewSelected().setSelected(false);
+                          vSelected = v;
+                          vSelected.setSelected(true);
+                      } else {
+                          vSelected.setSelected(false);
+                          vSelected = v;
+                          vSelected.setSelected(true);
+                      }
+                  }
 
-               ((MainActivity)getActivity()).showSearchPass(position);
+
               }
              });
     }

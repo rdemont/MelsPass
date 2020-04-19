@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.rmbi.melspass">
 
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" android:requiredFeature="false"/>
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -10,13 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <!-- android:configChanges="orientation|screenSize" -->
-        <activity android:name=".view.MainActivity">
+        <activity android:name=".view.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!-- android:configChanges="orientation|screenSize" -->
+        <activity android:name=".view.MainActivity">
+
         </activity>
     </application>
 

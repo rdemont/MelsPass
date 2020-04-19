@@ -31,6 +31,7 @@ public class PassListFragment extends TemplateFragment {
     RecyclerView rvPassList;
     private ViewModel passViewModel ;
     GroupWithPass groupWithPass;
+    PassListAdapter passListAdapter;
 
     private PassListFragment.OnItemClickedListener mCallback;
 
@@ -73,7 +74,7 @@ public class PassListFragment extends TemplateFragment {
         View rootView = getRootView();
 
         rvPassList = (RecyclerView) rootView.findViewById(R.id.rvPassList);
-        final PassListAdapter passListAdapter = new PassListAdapter(rvPassList.getContext());
+        passListAdapter = new PassListAdapter(rvPassList.getContext());
         passListAdapter.setParentActivity(getActivity());
         rvPassList.setAdapter(passListAdapter);
         rvPassList.setLayoutManager(new LinearLayoutManager(rvPassList.getContext()));
@@ -125,13 +126,27 @@ public class PassListFragment extends TemplateFragment {
         super.onResume();
     }
 
+    View vSelected ;
     private void configureOnClickRecyclerView(){
         ItemClickSupport.addTo(rvPassList, R.layout.pass_list_layout)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        if (((MainActivity)getActivity()).getIsLargeScreen() && getIsMainLayout() ){
+                            ((MainActivity)getActivity()).showPass(false,false,position);
+                        }else {
+                            if ((vSelected == null) && (passListAdapter != null)) {
+                                passListAdapter.getViewSelected().setSelected(false);
+                                vSelected = v;
+                                vSelected.setSelected(true);
+                            } else {
+                                vSelected.setSelected(false);
+                                vSelected = v;
+                                vSelected.setSelected(true);
+                            }
+                        }
 
-                        ((MainActivity)getActivity()).showPass(false,false,position);
+
                     }
                 });
     }
