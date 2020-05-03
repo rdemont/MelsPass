@@ -39,35 +39,57 @@ public class ViewModel extends AndroidViewModel {
         return repository.getGroupsWithPass();
     }
 
+    public List<PassWithGroup> getPassWithGroup() {
+        return repository.getPassWithGroup();
+    }
+
+    public List<Pass> getPassList() {
+        return repository.getPassList();
+    }
+
 
     public LiveData<List<Pass>> getSearchPass(String search) {
         return repository.getSearchPass(search);
     }
 
 
-    public void insert(Group group) {
-            repository.insert(group);
+    public Setup getSetup()
+    {
+        return repository.getSetup();
     }
 
     public void insert(Pass pass) {
         repository.insert(pass);
     }
-
-
     public void update(Pass... pass) {
         repository.update(pass);
     }
-
     public void delete(Pass... pass) {
         repository.delete(pass);
     }
 
-
+    public void insert(Group group) {
+        repository.insert(group);
+    }
     public void update(Group... group) {
         repository.update(group);
     }
-
     public void delete(Group... group) {
         repository.delete(group);
     }
+
+    public void insert(Setup setup) {
+        repository.insert(setup);
+    }
+    public void update(Setup... setup) {
+        repository.update(setup);
+    }
+    public void delete(Setup... setup) {
+        repository.delete(setup);
+    }
+
+
+    public void BackupDB(String outFileName){repository.BackupDB(outFileName);}
+    public void RestoreDB(String inFileName){repository.RestoreDB(inFileName);}
+
 }

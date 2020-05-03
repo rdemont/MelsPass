@@ -67,6 +67,18 @@ public class SplashScreenActivity extends AppCompatActivity {
  */
     }
 
+    private void start(){
+        handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent(SplashScreenActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        },1000);
+    }
+
     private void authUser(Executor executor) {
         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle(getString(R.string.biometric_title))
@@ -81,17 +93,16 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Toast.makeText(
                         getApplicationContext(),
                         getString(R.string.biometric_auth_error),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                 ).show();
+                System.exit(0);
 
             }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Intent intent=new Intent(SplashScreenActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+                start();
             }
 
             @Override
@@ -99,8 +110,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                 super.onAuthenticationFailed();
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.biometric_auth_error),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                 ).show();
+                System.exit(0);
             }
 
         });

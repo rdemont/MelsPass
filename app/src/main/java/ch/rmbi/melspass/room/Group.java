@@ -8,10 +8,11 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.Relation;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(tableName = "Group_tbl")
-public class Group {
+public class Group implements Serializable {
 
     public Group(String name, String description,int imageIndex,int orderNumber) {
         this.name = name;

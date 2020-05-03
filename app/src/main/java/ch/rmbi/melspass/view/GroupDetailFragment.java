@@ -261,4 +261,6 @@ public class GroupDetailFragment extends TemplateFragment implements DrawablePic
 
 
     }
+
+
 }

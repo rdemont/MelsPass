@@ -5,36 +5,32 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import ch.rmbi.melspass.R;
-import ch.rmbi.melspass.utils.Icon;
-import ch.rmbi.melspass.utils.IconList;
+import ch.rmbi.melspass.room.Pass;
+import ch.rmbi.melspass.room.PassWithGroup;
 
-public class IconListAdapter extends BaseAdapter implements SpinnerAdapter {
+public class PassListSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
     Activity parentActivity;
 
-    private List<Icon> icons ;
+    private List<PassWithGroup> passWithGroupList ;
     private Context context ;
 
-    public IconListAdapter(Context context,List<Icon> iconList) {
+    public PassListSpinnerAdapter(Context context, List<PassWithGroup> passWithGroupList) {
         super();
 
-        this.icons = iconList;
+        this.passWithGroupList = passWithGroupList;
         this.context = context;
     }
-
 
 
     @Override
@@ -44,12 +40,12 @@ public class IconListAdapter extends BaseAdapter implements SpinnerAdapter {
 
     @Override
     public int getCount() {
-        return icons.size();
+        return passWithGroupList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return icons.get(position);
+        return passWithGroupList.get(position);
     }
 
     @Override
@@ -67,16 +63,17 @@ public class IconListAdapter extends BaseAdapter implements SpinnerAdapter {
     public View getCustomView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
     {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.drawable_list_layout, parent, false);
 
-        TextView textView = (TextView) rowView.findViewById(R.id.tvDescription);
-        textView.setText(icons.get(position).getDescription());
+        View rowView = inflater.inflate(R.layout.pass_list_spinner_layout, parent, false);
 
-        ImageView imageView = (ImageView)rowView.findViewById(R.id.ivDrawable);
-        imageView.setImageDrawable(icons.get(position).getDrawable());
+        TextView tvGroup = (TextView) rowView.findViewById(R.id.tvGroup);
+        tvGroup.setText(passWithGroupList.get(position).group.getName());
 
+        TextView tvPass = (TextView) rowView.findViewById(R.id.tvPass);
+        tvPass.setText(passWithGroupList.get(position).pass.getName());
         return rowView;
 
     }
+
 
 }

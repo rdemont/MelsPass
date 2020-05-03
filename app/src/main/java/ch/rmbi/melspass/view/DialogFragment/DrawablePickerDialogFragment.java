@@ -6,9 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -16,10 +14,9 @@ import androidx.fragment.app.DialogFragment;
 import java.util.List;
 
 import ch.rmbi.melspass.R;
-import ch.rmbi.melspass.adapter.IconListAdapter;
+import ch.rmbi.melspass.adapter.IconListSpinnerAdapter;
 import ch.rmbi.melspass.utils.Icon;
 import ch.rmbi.melspass.utils.IconList;
-import ch.rmbi.melspass.utils.PasswordGenerator;
 
 public class DrawablePickerDialogFragment extends DialogFragment {
     DrawablePickerDialogListener listener;
@@ -46,7 +43,7 @@ public class DrawablePickerDialogFragment extends DialogFragment {
 
             }
         });
-        IconListAdapter adapter = new IconListAdapter(getContext(), icons);
+        IconListSpinnerAdapter adapter = new IconListSpinnerAdapter(getContext(), icons);
         spinner.setAdapter(adapter);
 
         // Set the dialog title

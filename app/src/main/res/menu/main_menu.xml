@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/menu.Search"
-        app:actionViewClass="android.widget.SearchView"></item>
+        android:id="@+id/menu_backup_setup"
+        android:icon="@drawable/ic_backup_black_24dp"
+        android:title="@string/menu.BackupSetup">
+    </item>
     <item
-        android:id="@+id/action_add_pass"
-        android:icon="@drawable/ic_add_circle_black_24dp"
-        android:title="@string/Pass.add" />
+        android:id="@+id/menu_do_backup"
+        android:icon="@drawable/ic_backup_black_24dp"
+        android:title="@string/menu.doBackup">
+    </item>
     <item
-        android:id="@+id/action_add_group"
-        android:icon="@drawable/ic_add_circle_black_24dp"
-        android:title="@string/group.add"
-        ></item>
+        android:id="@+id/menu_do_restore"
+        android:icon="@drawable/ic_backup_black_24dp"
+        android:title="@string/menu.doRestore">
+    </item>
 </menu>

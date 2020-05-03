@@ -3,9 +3,10 @@ package ch.rmbi.melspass.room;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GroupWithPass {
+public class GroupWithPass implements Serializable {
 
     @Embedded public Group group;
 

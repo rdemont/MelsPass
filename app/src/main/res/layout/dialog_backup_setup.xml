@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <CheckBox
+        android:id="@+id/cbLocalBackup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do local backup" />
+
+    <CheckBox
+        android:id="@+id/cbFTPBackup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cbLocalBackup"
+        android:text="Do FTP Backup" />
+
+    <Spinner
+        android:id="@+id/spPass"
+        android:layout_below="@id/cbFTPBackup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvFtpFolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spPass"
+        android:width="400px"
+        android:text="FTP remote folder" />
+
+    <EditText
+        android:id="@+id/etFtpFolder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvFtpFolder"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/spPass"
+        android:inputType="textPersonName"
+        android:text=""
+        />
+
+    <TextView
+        android:id="@+id/tvCryptoKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etFtpFolder"
+        android:width="400px"
+        android:text="Security key" />
+
+    <EditText
+        android:id="@+id/etCryptoKey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvCryptoKey"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/etFtpFolder"
+        android:text=""
+        android:inputType="textPassword"
+        android:autofillHints=""
+        />
+
+
+
+    <ImageButton
+        android:id="@+id/bShowUserPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etCryptoKey"
+        android:layout_toStartOf="@id/bPasswordGenerator"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bShowPassword"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_remove_red_eye_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/bPasswordGenerator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/etCryptoKey"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:contentDescription="@string/bGeneratePassword"
+        android:maxWidth="24dip"
+        android:maxHeight="24dip"
+        android:minWidth="24dip"
+        android:minHeight="24dip"
+        android:src="@drawable/ic_loop_black_24dp" />
+
+
+</RelativeLayout>

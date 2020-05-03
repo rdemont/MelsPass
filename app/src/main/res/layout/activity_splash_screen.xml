@@ -29,7 +29,7 @@
         android:layout_height="400dp"
 
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_logo_mels_prog_48dp"
+        android:src="@mipmap/ic_logo_mels_round"
         app:layout_constraintBottom_toTopOf="@+id/guidelineH2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
-        android:text="Mel's pass"
+        android:text="@string/splash_screen_welcome"
         android:textColor="@color/colorTitle"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"

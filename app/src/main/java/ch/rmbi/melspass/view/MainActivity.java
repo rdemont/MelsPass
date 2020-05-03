@@ -6,13 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
+import java.util.Calendar;
 import java.util.List;
 
 import ch.rmbi.melspass.R;
@@ -126,27 +127,9 @@ public class MainActivity extends AppCompatActivity  {
 
     public void cancelSearch(){
         searchPassList = null ;
-        //groupPosition = 0;
         passPosition = 0;
     }
-    /*
-        public void show()
-        {
 
-            showGroupList();
-
-            cancelSearch();
-            GroupListFragment groupListFragment = new GroupListFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main, groupListFragment).commit();
-
-            if (isLargeScreen) {
-                WelcomeFragment welcomeFragment = new WelcomeFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_detail, welcomeFragment).commit();
-            }
-
-
-        }
-     */
     public void showSearch(String search)
     {
         Fragment fragMain = getSupportFragmentManager().findFragmentById(R.id.frame_layout_main);
@@ -326,11 +309,27 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+    long pauseTime =Calendar.getInstance().getTimeInMillis();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pauseTime = Calendar.getInstance().getTimeInMillis();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Calendar.getInstance().getTimeInMillis() > pauseTime +10000) { //10 secondes
+            Intent intent = new Intent(this, SplashScreenActivity.class);
+            startActivity(intent);
+        }
+    }
+
     public void showPassList(int grpPos)
     {
         groupPosition = grpPos ;
         showPassList();
-
     }
 
 }

@@ -2,10 +2,14 @@ package ch.rmbi.melspass.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -16,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ch.rmbi.melspass.R;
 import ch.rmbi.melspass.utils.ItemClickSupport;
+import ch.rmbi.melspass.view.DialogFragment.BackupSetupDialogFragment;
 import ch.rmbi.melspass.view.DialogFragment.DrawablePickerDialogFragment;
 import ch.rmbi.melspass.view.DialogFragment.SearchDialogFragment;
 
@@ -40,9 +45,12 @@ public abstract class TemplateFragment extends Fragment {
     abstract protected int getFragmentButtonVisible();
     abstract protected void onBackPressed();
 
+
+
     private View rootView;
     TemplateFragment me = this;
 
+    private ImageButton bSetupMenu;
     private ImageButton bAppFirst;
     private ImageButton bAppPrevious;
     private ImageButton bAppSave;
@@ -118,6 +126,9 @@ public abstract class TemplateFragment extends Fragment {
 
         isMainLayout = container.getId() == R.id.frame_layout_main;
 
+
+
+
         ViewStub stub = appView.findViewById(R.id.vsApp);
         stub.setLayoutResource(getFragmentLayout());
         rootView = stub.inflate();
@@ -133,6 +144,7 @@ public abstract class TemplateFragment extends Fragment {
         TextView tvTitle =  appView.findViewById(R.id.tvAppTitle);
 
 
+        bSetupMenu = appView.findViewById(R.id.bSetupMenu);
         bAppFirst = appView.findViewById(R.id.bAppFirst);
         bAppPrevious = appView.findViewById(R.id.bAppPrevious);
         bAppSave = appView.findViewById(R.id.bAppSave);
@@ -145,6 +157,14 @@ public abstract class TemplateFragment extends Fragment {
         bAppNext = appView.findViewById(R.id.bAppNext);
         bAppLast = appView.findViewById(R.id.bAppLast);
 
+
+        if (((MainActivity)getActivity()).getIsLargeScreen() && getIsMainLayout())
+        {
+            bSetupMenu.setVisibility(View.INVISIBLE);
+        }else {
+            bSetupMenu.setVisibility(View.VISIBLE);
+        }
+
         bAppFirst.setVisibility(View.INVISIBLE);
         bAppPrevious.setVisibility(View.INVISIBLE);
         bAppSave.setVisibility(View.INVISIBLE);
@@ -156,6 +176,35 @@ public abstract class TemplateFragment extends Fragment {
         bAppDelete.setVisibility(View.INVISIBLE);
         bAppNext.setVisibility(View.INVISIBLE);
         bAppLast.setVisibility(View.INVISIBLE);
+
+
+        bSetupMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getContext(),v);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_backup_setup:
+                                BackupSetupDialogFragment dialog = new BackupSetupDialogFragment();
+                                dialog.show(getParentFragmentManager(), "NoticeDialogFragment");
+                                break ;
+                            case R.id.menu_do_backup :
+                                //ToDo backup
+                                break ;
+                            case R.id.menu_do_restore :
+                                //ToDo restore
+                                break ;
+                        }
+                        return false;
+                    }
+                });
+                MenuInflater inflater = getActivity().getMenuInflater();
+                inflater.inflate(R.menu.main_menu,popup.getMenu());
+                popup.show();
+            }
+        });
 
 
         bAppSearch.setOnClickListener(new View.OnClickListener() {
@@ -193,4 +242,5 @@ public abstract class TemplateFragment extends Fragment {
     protected View getRootView() {
         return rootView;
     }
+
 }

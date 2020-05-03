@@ -18,6 +18,18 @@
 
         />
 
+    <ImageButton
+        android:id="@+id/bSetupMenu"
+        style="@style/bottom_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15px"
+        android:contentDescription="@string/bPrevious.hine"
+        app:srcCompat="@drawable/ic_more_vert_black_24dp" />
+
+
     <TableRow
         android:id="@+id/LineTop"
         android:layout_width="match_parent"

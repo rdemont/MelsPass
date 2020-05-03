@@ -23,6 +23,10 @@ public class Repository {
         return  db.groupWithPassDao().getLiveGroupsWithPass();
     }
 
+    public List<PassWithGroup> getPassWithGroup() {
+        return db.passWithGroupDao().getPassWithGroup();
+    }
+
     public List<Group> getGroups() {
         return db.groupDao().getGroups();
     }
@@ -31,6 +35,8 @@ public class Repository {
     {
         return db.groupDao().findPassForGroup(group.getId());
     }
+
+    public List<Pass> getPassList() { return db.passDao().getAllPass() ;}
 
     public LiveData<List<Pass>> getSearchPass(String search){
         String str = "%"+search+"%";
@@ -45,6 +51,7 @@ public class Repository {
     public int getPassMaxOrder(){
         return db.passDao().getPassMaxOrder();
     }
+
 
 
 
@@ -85,4 +92,36 @@ public class Repository {
             db.groupDao().delete(group);
         });
     }
+
+
+    public Setup getSetup(){
+        return db.setupDao().getSetup();
+    }
+
+
+
+    public void insert(Setup setup) {
+        LocalRoomDatabase.databaseWriteExecutor.execute(() -> {
+            db.setupDao().insert(setup);
+        });
+    }
+
+
+    public void update(Setup... setup) {
+        LocalRoomDatabase.databaseWriteExecutor.execute(() -> {
+            db.setupDao().update(setup);
+        });
+    }
+
+    public void delete(Setup... setup) {
+        LocalRoomDatabase.databaseWriteExecutor.execute(() -> {
+            db.setupDao().delete(setup);
+        });
+    }
+
+
+
+
+    public void BackupDB(String outFileName){db.BackupDB(outFileName);}
+    public void RestoreDB(String inFileName){db.RestoreDB(inFileName);}
 }

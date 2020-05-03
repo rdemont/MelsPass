@@ -1,6 +1,7 @@
 package ch.rmbi.melspass.room;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -8,19 +9,96 @@ import androidx.room.Room;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Group.class,Pass.class}, version = 4, exportSchema = false)
+@Database(entities = {Group.class,Pass.class,Setup.class}, version = 1, exportSchema = false)
 abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
 
     abstract PassDao passDao();
     abstract GroupDao groupDao();
     abstract GroupWithPassDao groupWithPassDao();
+    abstract PassWithGroupDao passWithGroupDao();
+    abstract SetupDao setupDao();
+
+    public static final String DATABASE_NAME = "mels_pass_db";
+
+    public void BackupDB(String outFileName) {
+
+        close();
+        //database path
+        final String inFileName = context.getDatabasePath(DATABASE_NAME).getAbsolutePath();
+        //context.getDatabasePath(DATABASE_NAME).toString();
+
+        try {
+
+            File dbFile = new File(inFileName);
+            FileInputStream fis = new FileInputStream(dbFile);
+
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the input file to the output file
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+
+            Toast.makeText(context, "Backup Completed", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(context, "Unable to backup database. Retry", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    public void RestoreDB(String inFileName) {
+
+        final String outFileName = context.getDatabasePath(DATABASE_NAME+".db").toString();
+
+        try {
+
+            File dbFile = new File(inFileName);
+            FileInputStream fis = new FileInputStream(dbFile);
+
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+
+            // Transfer bytes from the input file to the output file
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+
+            Toast.makeText(context, "Import Completed", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(context, "Unable to import database. Retry", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
 
 
     private static volatile LocalRoomDatabase instance ;
     private static final int NUMBER_OF_THREADS = 4;
+
+    private Context context ;
 
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
@@ -29,18 +107,22 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
             synchronized (LocalRoomDatabase.class) {
                 if (instance == null) {
                     instance = Room.databaseBuilder(context.getApplicationContext(),
-                            LocalRoomDatabase.class, "group_database")
+                            LocalRoomDatabase.class, DATABASE_NAME)
                             .addCallback(sRoomDatabaseCallback)
-                            .addMigrations(MIGRATION_1_2)
-                            .addMigrations(MIGRATION_2_3)
-                            .addMigrations(MIGRATION_3_4)
                             .allowMainThreadQueries()
                             .build();
+//        .addMigrations(MIGRATION_1_2)
+//        .addMigrations(MIGRATION_2_3)
+//        .addMigrations(MIGRATION_3_4)
+
+                    instance.context = context;
                 }
             }
         }
         return instance;
     }
+
+//
 
     private static androidx.room.RoomDatabase.Callback sRoomDatabaseCallback = new androidx.room.RoomDatabase.Callback() {
         @Override
@@ -56,37 +138,12 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
 
 
 //                instance.groupDao().deleteAll();
-/*
-                long key;
 
-                Group grp = new Group("GRP1","C'est le groupe 1");
-                grp.setId(instance.groupDao().insert(grp));
-                Pass pass = new Pass(grp.getId(),"Bank","rdemont","xxx","url","description");
-                instance.passDao().insert(pass);
-                pass = new Pass(grp.getId(),"Bank1","rdemont1","xxx","url","description");
-                instance.passDao().insert(pass);
-                pass = new Pass(grp.getId(),"Bank2","rdemont2","xxx","url","description");
-                instance.passDao().insert(pass);
 
-                grp = new Group("GRP2","C'est le groupe 2");
-                grp.setId(instance.groupDao().insert(grp));
-                pass = new Pass(grp.getId(),"Post","2rdemont1","xxx","url","description");
-                instance.passDao().insert(pass);
-                pass = new Pass(grp.getId(),"Post2","2rdemont2","xxx","url","description");
-                instance.passDao().insert(pass);
-
-                grp = new Group("GRP3","C'est le groupe 3");
-                grp.setId(instance.groupDao().insert(grp));
-                pass = new Pass(grp.getId(),"Boulot","3rdemont1","xxx","url","description");
-                instance.passDao().insert(pass);
-                pass = new Pass(grp.getId(),"Boulot","3rdemont2","xxx","url","description");
-                instance.passDao().insert(pass);
-
- */
             });
         }
     };
-
+/*
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
@@ -111,7 +168,8 @@ abstract public class LocalRoomDatabase extends androidx.room.RoomDatabase {
         }
     };
 
+ */
+ }
 
 
-}
 

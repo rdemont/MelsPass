@@ -67,5 +67,9 @@
     <string name="biometric_auth_error">Erreur d\'identification</string>
     <string name="copy_password">Password copié dans le presse-papier</string>
     <string name="copy_username">Nom d\'utilisateur copié dans le presse papier</string>
+    <string name="splash_screen_welcome">Bienvenue</string>
+    <string name="menu.BackupSetup">Backup configuration</string>
+    <string name="menu.doBackup">Do backup</string>
+    <string name="menu.doRestore">Restore</string>
 
 </resources>

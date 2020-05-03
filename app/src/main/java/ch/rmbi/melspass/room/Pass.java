@@ -7,7 +7,10 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
+import java.io.Serializable;
+import java.util.List;
 
 
 @Entity(tableName = "Pass_tbl",
@@ -15,7 +18,7 @@ import androidx.room.PrimaryKey;
         parentColumns = "id",
         childColumns = "group_id",
         onDelete = ForeignKey.CASCADE))
-public class Pass {
+public class Pass implements Serializable {
 
 
     public Pass(Long group_id,String name,String username, String userPass, String url, String description,int orderNumber) {
@@ -32,8 +35,6 @@ public class Pass {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    @Ignore
-    private Group group ;
 
     private long group_id ;
     private String username ;
@@ -70,9 +71,7 @@ public class Pass {
         this.id = id;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
+
 
     public void setGroup_id(long group_id) {
         this.group_id = group_id;
@@ -98,10 +97,7 @@ public class Pass {
         return group_id;
     }
 
-    public Group getGroup() {
-        return this.group;
-        //return group;
-    }
+
 
 
 
